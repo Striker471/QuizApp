@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">QuizApp</string>
+    <string name="create_an_account">Create an account</string>
+    <string name="create_account_body">Please enter your username, email address,
+        and password. If you forget it, then you have to do forgot password</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign up</string>
+    <string name="sign_in">Sign in</string>
+    <string name="reset_password">Reset password</string>
+    <string name="hello_there">Hello there</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="continue_with_facebook">Continue with Facebook</string>
+    <string name="or">or</string>
+    <string name="rembember_me">Remember me</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="reset_password_label">Enter your email and we will send you a link to reset your password</string>
+    <string name="quizmania">QuizMania</string>
+    <string name="login_or_sign_up">Login or Sign Up</string>
+    <string name="login_or_create">Login or create an account to take quiz, take part in challenge, and more.</string>
+</resources>
