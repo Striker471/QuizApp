@@ -11,12 +11,13 @@
     <color name="lightsurface">#FFF5EDFF</color>
     <color name="onlightsurface">#FF222222</color>
     <color name="topBar">#FFF3EDF7</color>
-    <color name="card">#FFF7F2FA</color>
+    <color name="card">#FFFFEAEA</color>
     <color name="grey_text">#FF858494</color>
     <color name="purple_button">#FF6A5AE0</color>
     <color name="neutral_grey">#FFE6E6E6</color>
     <color name="purple">#FF6750A4</color>
     <color name="onPurpleButton">#FFFFFFFF</color>
+    <color name="image_card">#FFE6E0E9</color>
 
 
 </resources>

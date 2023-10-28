@@ -22,6 +22,7 @@ val Typography = Typography(
         fontFamily = FontFamily(Font(R.font.rubik_medium)),
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
+        lineHeight = 24.sp
 //        letterSpacing = 0.sp
     ),
     bodySmall = TextStyle(

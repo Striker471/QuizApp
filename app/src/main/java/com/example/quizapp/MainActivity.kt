@@ -20,7 +20,10 @@ import com.example.quizapp.presentation.components.CenterTopAppBar
 import com.example.quizapp.presentation.components.MainActionButton
 import com.example.quizapp.presentation.components.MainOutlinedTextField
 import com.example.quizapp.presentation.components.OutlinedButtonWithImage
+import com.example.quizapp.presentation.create_question.CreateQuestionScreen
+import com.example.quizapp.presentation.create_quiz.CreateQuizScreen
 import com.example.quizapp.presentation.login.LoginScreen
+import com.example.quizapp.presentation.menu.MenuScreen
 import com.example.quizapp.presentation.register.RegisterScreen
 import com.example.quizapp.presentation.reset_password.ResetPasswordScreen
 import com.example.quizapp.presentation.start.StartScreen
@@ -35,8 +38,11 @@ class MainActivity : ComponentActivity() {
                 var text by remember { mutableStateOf("") }
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = colorResource(R.color.surface)) {
+//                    MenuScreen()
+//                    CreateQuizScreen()
 //                    RegisterScreen()
-                    StartScreen()
+                      CreateQuestionScreen()
+//                    StartScreen()
 //                    LoginScreen()
 //                    ResetPasswordScreen()
 //                    Scaffold(
