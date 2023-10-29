@@ -21,4 +21,20 @@
     <string name="quizmania">QuizMania</string>
     <string name="login_or_sign_up">Login or Sign Up</string>
     <string name="login_or_create">Login or create an account to take quiz, take part in challenge, and more.</string>
+    <string name="view_all">View all</string>
+    <string name="the_latest">The latest</string>
+    <string name="most_popular">Most popular</string>
+    <string name="create_quiz">Create Quiz</string>
+    <string name="add_image">Add Image</string>
+    <string name="title">Title</string>
+    <string name="enter_quiz_title">Enter quiz title</string>
+    <string name="description">Description</string>
+    <string name="add_question">Add question</string>
+    <string name="add_answear">Add answear</string>
+    <string name="multiple_answear">Multiple Answear</string>
+    <string name="correct_answear">Correct Answear</string>
+    <string name="delete">Delete</string>
+    <string name="finish">Finish</string>
+
+
 </resources>

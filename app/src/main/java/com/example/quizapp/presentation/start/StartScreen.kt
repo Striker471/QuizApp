@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -32,7 +33,7 @@ fun StartScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-//        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(1f))
         Image(
             painter = painterResource(R.drawable.start_icon),
             contentDescription = null,
@@ -48,16 +49,24 @@ fun StartScreen(
                 color = colorResource(R.color.black)
             )
         )
-
-        Card(
+        Spacer(modifier = Modifier.height(32.dp))
+        ElevatedCard(
             modifier = Modifier
-                .height(276.dp)
-                .padding(horizontal = 8.dp)
+                .padding(
+                    start = 8.dp,
+                    end = 8.dp,
+                    bottom = 16.dp
+                ),
+            colors = CardDefaults.cardColors(
+                containerColor = colorResource(R.color.card)
+            )
         )
         {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
+
             ) {
+                Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = stringResource(R.string.login_or_sign_up),
                     style = MaterialTheme.typography.headlineMedium,
@@ -93,6 +102,7 @@ fun StartScreen(
                         style = MaterialTheme.typography.bodyMedium,
                     )
                 }
+                Spacer(modifier = Modifier.padding(8.dp))
             }
         }
     }
