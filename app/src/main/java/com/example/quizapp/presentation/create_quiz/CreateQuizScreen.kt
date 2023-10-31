@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.quizapp.R
 import com.example.quizapp.presentation.components.AddImageCard
 import com.example.quizapp.presentation.components.CenterTopAppBar
@@ -17,7 +18,7 @@ import com.example.quizapp.presentation.components.MainActionButton
 
 @Composable
 fun CreateQuizScreen(
-
+    navController: NavController
 ) {
     Scaffold(
         topBar = {

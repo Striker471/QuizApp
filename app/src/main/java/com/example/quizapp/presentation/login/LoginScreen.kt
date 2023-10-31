@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -20,6 +21,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.quizapp.R
 import com.example.quizapp.presentation.components.CenterTopAppBar
 import com.example.quizapp.presentation.components.MainActionButton
@@ -27,7 +30,11 @@ import com.example.quizapp.presentation.components.MainOutlinedTextField
 import com.example.quizapp.presentation.components.OutlinedButtonWithImage
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    navController: NavController,
+    viewModel: LoginViewModel = hiltViewModel()
+) {
+    val state by viewModel.state
 
     Scaffold(
         topBar = {
@@ -35,7 +42,9 @@ fun LoginScreen() {
                 titleText = stringResource(R.string.login),
                 navigationIcon = {
                     IconButton(
-                        onClick = {}
+                        onClick = {
+                            navController.popBackStack()
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
@@ -67,13 +76,13 @@ fun LoginScreen() {
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedButtonWithImage(
-                    onClick = {},
+                    onClick = { viewModel.onEvent(LoginEvent.GoogleSignIn) },
                     text = stringResource(R.string.continue_with_google),
                     icon = R.drawable.google_icon
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 OutlinedButtonWithImage(
-                    onClick = {},
+                    onClick = { viewModel.onEvent(LoginEvent.FacebookSignIn) },
                     text = stringResource(R.string.continue_with_facebook),
                     icon = R.drawable.facebook_icon
                 )
@@ -82,21 +91,22 @@ fun LoginScreen() {
             Text(stringResource(R.string.or))
             Spacer(modifier = Modifier.height(16.dp))
             MainOutlinedTextField(
-                text = "email",
-                onValueChange = {},
+                text = state.email,
+                onValueChange = { viewModel.onEvent(LoginEvent.EnteredEmail(it)) },
                 label = stringResource(R.string.email)
 
             )
             Spacer(modifier = Modifier.height(16.dp))
             MainOutlinedTextField(
-                text = "",
-                onValueChange = {},
+                text = state.password,
+                onValueChange = { viewModel.onEvent(LoginEvent.EnteredPassword(it)) },
                 label = stringResource(R.string.password)
             )
             Spacer(modifier = Modifier.height(32.dp))
             val checkedState = remember { mutableStateOf(true) }
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(start = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
 

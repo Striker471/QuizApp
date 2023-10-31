@@ -24,7 +24,7 @@ fun AddImageCard(
 
 ) {
     ElevatedCard(
-        onClick ={},
+        onClick = {},
         modifier = Modifier
             .height(182.dp)
             .fillMaxWidth(),

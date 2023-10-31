@@ -13,12 +13,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.quizapp.presentation.components.CenterTopAppBar
 import com.example.quizapp.presentation.components.MenuCardWithNavigation
 import com.example.quizapp.presentation.components.QuizCard
 
 @Composable
-fun MenuScreen() {
+fun MenuScreen(
+    navController: NavController
+) {
 
 
     Scaffold(
@@ -56,12 +59,8 @@ fun MenuScreen() {
                 items(8) {
                     QuizCard()
                     Spacer(modifier = Modifier.width(8.dp))
-
                 }
-
             }
-
-
         }
     }
 }

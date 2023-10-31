@@ -21,7 +21,7 @@ fun MainActionButton(
 ) {
 
     Button(
-        onClick = { onClick },
+        onClick = onClick,
         modifier = modifier
             .fillMaxWidth(0.83f)
             .height(56.dp),
@@ -31,7 +31,7 @@ fun MainActionButton(
         ),
         shape = RoundedCornerShape(20.dp),
 
-    ) {
+        ) {
         Text(
             text = text,
             style = MaterialTheme.typography.bodyMedium

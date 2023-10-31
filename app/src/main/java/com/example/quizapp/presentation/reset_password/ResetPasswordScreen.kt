@@ -13,6 +13,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.quizapp.R
 import com.example.quizapp.presentation.components.CenterTopAppBar
 import com.example.quizapp.presentation.components.MainActionButton
@@ -20,7 +21,7 @@ import com.example.quizapp.presentation.components.MainOutlinedTextField
 
 @Composable
 fun ResetPasswordScreen(
-
+    navController: NavController
 ) {
     Scaffold(
         topBar = {
@@ -28,7 +29,9 @@ fun ResetPasswordScreen(
                 titleText = stringResource(R.string.reset_password),
                 navigationIcon = {
                     IconButton(
-                        onClick = {}
+                        onClick = {
+                            navController.popBackStack()
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,

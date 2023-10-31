@@ -17,13 +17,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.quizapp.R
 import com.example.quizapp.presentation.components.CenterTopAppBar
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun CreateQuestionScreen() {
+fun CreateQuestionScreen(
+    navController: NavController
+) {
     Scaffold(
         topBar = {
             CenterTopAppBar(

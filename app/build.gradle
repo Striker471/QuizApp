@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
     id 'kotlin-parcelize'
+    id 'com.google.gms.google-services'
 }
 
 
@@ -92,6 +93,10 @@ dependencies {
     implementation "androidx.compose.material:material-icons-extended:$compose_ui_version"
 
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.31.1-alpha"
+
+    implementation 'com.google.firebase:firebase-auth:21.0.7'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.2.2'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.1.0'
 
 
 }
