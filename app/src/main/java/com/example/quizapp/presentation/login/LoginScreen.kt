@@ -137,7 +137,7 @@ fun LoginScreen(
             )
             Spacer(modifier = Modifier.weight(1f))
             MainActionButton(
-                onClick = {},
+                onClick = { viewModel.onEvent(LoginEvent.SignIn) },
                 text = stringResource(R.string.sign_in),
                 modifier = Modifier.padding(bottom = 32.dp)
             )

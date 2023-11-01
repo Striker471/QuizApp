@@ -20,8 +20,10 @@ import com.example.quizapp.presentation.reset_password.ResetPasswordScreen
 import com.example.quizapp.presentation.start.StartScreen
 import com.example.quizapp.presentation.util.Screen
 import com.example.quizapp.ui.theme.QuizAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 @OptIn(ExperimentalMaterial3Api::class)
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

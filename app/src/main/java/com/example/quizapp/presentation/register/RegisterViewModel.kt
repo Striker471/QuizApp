@@ -8,12 +8,14 @@ import com.example.quizapp.domain.model.RegisterData
 import com.example.quizapp.domain.use_case.auth.Register
 import com.example.quizapp.domain.util.Resource
 import com.example.quizapp.feature_repository.data.repository.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
+@HiltViewModel
 class RegisterViewModel
 @Inject constructor(
     private val register: Register
