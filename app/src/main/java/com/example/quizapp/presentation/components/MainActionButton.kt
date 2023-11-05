@@ -17,7 +17,8 @@ import com.example.quizapp.R
 fun MainActionButton(
     onClick: () -> Unit,
     text: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
 
     Button(
@@ -30,7 +31,7 @@ fun MainActionButton(
             contentColor = colorResource(R.color.onPurpleButton)
         ),
         shape = RoundedCornerShape(20.dp),
-
+        enabled = enabled
         ) {
         Text(
             text = text,

@@ -56,6 +56,9 @@ class MainActivity : ComponentActivity() {
                         composable(Screen.ResetPasswordScreen.route){
                             ResetPasswordScreen(navController = navController)
                         }
+                        composable(Screen.MenuScreen.route){
+                            MenuScreen(navController = navController)
+                        }
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package com.example.quizapp.feature_repository.data.repository
 
+import com.example.quizapp.domain.model.LoginData
 import com.example.quizapp.domain.model.RegisterData
 import com.example.quizapp.domain.model.RegisterRepositoryData
 import com.example.quizapp.domain.util.error.EmptyUserException
@@ -13,18 +14,25 @@ class AuthRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firebaseFirestore: FirebaseFirestore
 ) {
-        suspend fun register(registerRepositoryData: RegisterRepositoryData) {
-            firebaseAuth.createUserWithEmailAndPassword(
-                registerRepositoryData.email,
-                registerRepositoryData.password
-            ).await()
+    suspend fun register(registerRepositoryData: RegisterRepositoryData) {
+        firebaseAuth.createUserWithEmailAndPassword(
+            registerRepositoryData.email,
+            registerRepositoryData.password
+        ).await()
 
 //            val uid = firebaseAuth.currentUser?.uid ?: throw EmptyUserException()
 //
 //            firebaseFirestore.collection("Users")
 //                .document(uid)
-//                .set(registerRepositoryData.userName).await(ch
-        }
+//                .set(registerRepositoryData.userName).await()
+    }
+
+    suspend fun login(loginData: LoginData) {
+        firebaseAuth.signInWithEmailAndPassword(
+            loginData.email,
+            loginData.password
+        ).await()
+    }
 
 
     fun logOut() {

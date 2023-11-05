@@ -1,5 +1,9 @@
 package com.example.quizapp.presentation.login
 
+import android.app.Activity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -7,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,7 +32,9 @@ import com.example.quizapp.presentation.components.CenterTopAppBar
 import com.example.quizapp.presentation.components.MainActionButton
 import com.example.quizapp.presentation.components.MainOutlinedTextField
 import com.example.quizapp.presentation.components.OutlinedButtonWithImage
+import com.example.quizapp.presentation.register.RegisterViewModel
 import com.example.quizapp.presentation.util.Screen
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun LoginScreen(
@@ -35,6 +42,54 @@ fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val state by viewModel.state
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val oneTapLoginLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult(),
+        onResult = { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.let { intent ->
+                    viewModel.onSignInResult(intent)
+                }
+            }
+        })
+
+
+    val basicLoginLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = { result ->
+            if (result.resultCode == Activity.RESULT_OK)
+                result.data?.let {
+                    viewModel.handleSignInResult(it)
+                }
+        }
+    )
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest {
+            when (it) {
+                is LoginViewModel.UiEvent.ShowSnackbar -> {
+                    snackbarHostState.showSnackbar(it.message)
+                }
+
+                is LoginViewModel.UiEvent.MenuNavigate -> {
+                    navController.navigate(Screen.MenuScreen.route)
+
+                    //popup i nested graph do zrobienia
+                }
+
+                is LoginViewModel.UiEvent.LaunchOneTapSignIn -> {
+                    oneTapLoginLauncher.launch(IntentSenderRequest.Builder(it.intentSender).build())
+                }
+
+                is LoginViewModel.UiEvent.BasicGoogleSignIn -> {
+                    basicLoginLauncher.launch(it.intent)
+                }
+            }
+        }
+    }
+
+
 
     Scaffold(
         topBar = {
@@ -53,6 +108,9 @@ fun LoginScreen(
                     }
                 }
             )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) { innerPadding ->
 
@@ -139,7 +197,8 @@ fun LoginScreen(
             MainActionButton(
                 onClick = { viewModel.onEvent(LoginEvent.SignIn) },
                 text = stringResource(R.string.sign_in),
-                modifier = Modifier.padding(bottom = 32.dp)
+                modifier = Modifier.padding(bottom = 32.dp),
+                enabled = !state.isLoading
             )
 
         }

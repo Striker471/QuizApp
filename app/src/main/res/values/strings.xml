@@ -1,4 +1,5 @@
 <resources>
+    <string name="web_client_id">904047719802-qoqcutsfcpfhhrqhorejpomsip1clduf.apps.googleusercontent.com</string>
     <string name="app_name">QuizApp</string>
     <string name="create_an_account">Create an account</string>
     <string name="create_account_body">Please enter your username, email address,
