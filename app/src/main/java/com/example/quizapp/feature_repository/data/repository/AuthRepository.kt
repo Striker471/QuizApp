@@ -13,16 +13,18 @@ class AuthRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val firebaseFirestore: FirebaseFirestore
 ) {
-    suspend fun register(registerRepositoryData: RegisterRepositoryData) {
-        firebaseAuth.createUserWithEmailAndPassword(registerRepositoryData.email, registerRepositoryData.password)
-            .await()
+        suspend fun register(registerRepositoryData: RegisterRepositoryData) {
+            firebaseAuth.createUserWithEmailAndPassword(
+                registerRepositoryData.email,
+                registerRepositoryData.password
+            ).await()
 
-        val uid = firebaseAuth.currentUser?.uid ?: throw EmptyUserException()
-
-        firebaseFirestore.collection("Users")
-            .document(uid)
-            .set(registerRepositoryData.userName).await()
-    }
+//            val uid = firebaseAuth.currentUser?.uid ?: throw EmptyUserException()
+//
+//            firebaseFirestore.collection("Users")
+//                .document(uid)
+//                .set(registerRepositoryData.userName).await(ch
+        }
 
 
     fun logOut() {
@@ -32,5 +34,9 @@ class AuthRepository @Inject constructor(
 
     fun getSignedInUser(): FirebaseUser? {
         return firebaseAuth.currentUser
+    }
+
+    suspend fun resetPassword(email: String) {
+        firebaseAuth.sendPasswordResetEmail(email).await()
     }
 }

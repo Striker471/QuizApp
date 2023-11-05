@@ -7,22 +7,35 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.quizapp.R
 import com.example.quizapp.presentation.components.CenterTopAppBar
 import com.example.quizapp.presentation.components.MainActionButton
 import com.example.quizapp.presentation.components.MainOutlinedTextField
+import com.example.quizapp.presentation.components.OutlinedButtonWithImage
 
 @Composable
 fun ResetPasswordScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: ResetPasswordViewModel = hiltViewModel()
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collect {
+            snackbarHostState.showSnackbar(it)
+        }
+    }
+
     Scaffold(
         topBar = {
             CenterTopAppBar(
@@ -40,8 +53,10 @@ fun ResetPasswordScreen(
                     }
                 }
             )
-        }
-    ) { innerPadding ->
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }) { innerPadding ->
 
         Column(
             modifier = Modifier
@@ -65,13 +80,13 @@ fun ResetPasswordScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
             MainOutlinedTextField(
-                text = "",
-                onValueChange = {},
+                text = viewModel.email.value,
+                onValueChange = { viewModel.onEmailChange(it) },
                 label = stringResource(R.string.email)
             )
             Spacer(modifier = Modifier.weight(1f))
             MainActionButton(
-                onClick = {},
+                onClick = { viewModel.onResetPasswordClick() },
                 text = stringResource(R.string.reset_password),
                 modifier = Modifier
                     .padding(bottom = 32.dp)

@@ -32,7 +32,7 @@ fun StartScreen(
 ) {
 
     LaunchedEffect(Unit) {
-        if (viewModel.isUserSignedIn())
+        if (viewModel.checkIfUserIsSignedIn())
             navController.navigate(Screen.MenuScreen.route) {
                 popUpTo(Screen.StartScreen.route) { inclusive = true }
             }

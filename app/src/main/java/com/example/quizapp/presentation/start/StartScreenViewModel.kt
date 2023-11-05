@@ -9,11 +9,11 @@ import javax.inject.Inject
 @HiltViewModel
 class StartScreenViewModel
 @Inject constructor(
-    private val checkIfUserIsUserSignedIn: IsUserSignedIn
+    private val isUserSignedIn: IsUserSignedIn
 ) : ViewModel() {
 
-    fun isUserSignedIn() : Boolean{
-        return checkIfUserIsUserSignedIn()
+    fun checkIfUserIsSignedIn() : Boolean{
+        return isUserSignedIn()
     }
 
 }

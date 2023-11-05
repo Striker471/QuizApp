@@ -11,6 +11,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.quizapp.presentation.create_quiz.CreateQuizScreen
 import com.example.quizapp.presentation.login.LoginScreen
@@ -51,6 +52,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Screen.RegisterScreen.route){
                             RegisterScreen(navController)
+                        }
+                        composable(Screen.ResetPasswordScreen.route){
+                            ResetPasswordScreen(navController = navController)
                         }
                     }
                 }

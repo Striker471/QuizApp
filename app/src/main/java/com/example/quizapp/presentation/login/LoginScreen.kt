@@ -13,7 +13,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -28,6 +27,7 @@ import com.example.quizapp.presentation.components.CenterTopAppBar
 import com.example.quizapp.presentation.components.MainActionButton
 import com.example.quizapp.presentation.components.MainOutlinedTextField
 import com.example.quizapp.presentation.components.OutlinedButtonWithImage
+import com.example.quizapp.presentation.util.Screen
 
 @Composable
 fun LoginScreen(
@@ -132,7 +132,7 @@ fun LoginScreen(
                 ),
                 color = colorResource(R.color.purple_button),
                 modifier = Modifier.clickable {
-
+                    navController.navigate(Screen.ResetPasswordScreen.route)
                 }
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -141,6 +141,7 @@ fun LoginScreen(
                 text = stringResource(R.string.sign_in),
                 modifier = Modifier.padding(bottom = 32.dp)
             )
+
         }
     }
 }
