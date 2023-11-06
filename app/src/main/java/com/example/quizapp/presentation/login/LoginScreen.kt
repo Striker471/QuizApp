@@ -131,20 +131,14 @@ fun LoginScreen(
                     text = stringResource(R.string.hello_there),
                     style = MaterialTheme.typography.headlineMedium,
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(56.dp))
                 OutlinedButtonWithImage(
                     onClick = { viewModel.onEvent(LoginEvent.GoogleSignInClick) },
                     text = stringResource(R.string.continue_with_google),
                     icon = R.drawable.google_icon
                 )
-                Spacer(modifier = Modifier.height(32.dp))
-                OutlinedButtonWithImage(
-                    onClick = { viewModel.onEvent(LoginEvent.FacebookSignIn) },
-                    text = stringResource(R.string.continue_with_facebook),
-                    icon = R.drawable.facebook_icon
-                )
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(56.dp))
             Text(stringResource(R.string.or))
             Spacer(modifier = Modifier.height(16.dp))
             MainOutlinedTextField(

@@ -60,7 +60,7 @@ object QuizModule {
 
     @Provides
     @Singleton
-    fun buildSignInRequest(context :Context): BeginSignInRequest {
+    fun buildSignInRequest(context: Context): BeginSignInRequest {
         return BeginSignInRequest.Builder()
             .setGoogleIdTokenRequestOptions(
                 BeginSignInRequest.GoogleIdTokenRequestOptions.builder()

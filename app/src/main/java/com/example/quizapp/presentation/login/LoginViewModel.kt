@@ -50,10 +50,6 @@ class LoginViewModel
                 _state.value = _state.value.copy(password = event.value)
             }
 
-            is LoginEvent.FacebookSignIn -> {
-                TODO()
-            }
-
             is LoginEvent.GoogleSignInClick -> {
                 loginUseCases.oneTapGoogleSignIn().onEach {
                     when (it) {

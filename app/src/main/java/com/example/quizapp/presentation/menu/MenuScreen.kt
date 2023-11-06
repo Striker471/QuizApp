@@ -1,17 +1,18 @@
 package com.example.quizapp.presentation.menu
 
-import android.graphics.drawable.Icon
-import androidx.compose.foundation.Image
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import com.example.quizapp.R
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.quizapp.presentation.components.CenterTopAppBar
@@ -27,12 +28,12 @@ fun MenuScreen(
     Scaffold(
         topBar = {
             CenterTopAppBar(
-                titleText = "Siema",
+                titleText = stringResource(R.string.quizmania),
                 navigationIcon = {
                     IconButton(onClick = { /* do something */ }) {
                         Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Localized description"
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = "Menu"
                         )
                     }
                 },
@@ -53,7 +54,8 @@ fun MenuScreen(
             )
             Spacer(modifier = Modifier.height(24.dp))
             LazyRow(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(start = 16.dp)
             ) {
                 items(8) {
