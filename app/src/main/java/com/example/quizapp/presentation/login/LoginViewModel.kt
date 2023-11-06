@@ -2,12 +2,13 @@ package com.example.quizapp.presentation.login
 
 import android.content.Intent
 import android.content.IntentSender
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quizapp.domain.model.LoginData
-import com.example.quizapp.domain.use_case.auth.Login
+import com.example.quizapp.domain.use_case.auth.LoginUseCases
 import com.example.quizapp.domain.util.Resource
 import com.example.quizapp.feature_repository.data.repository.GoogleAuthRepository
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -23,8 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel
 @Inject constructor(
-    private val login: Login,
-    private val googleAuthRepository: GoogleAuthRepository
+    private val loginUseCases: LoginUseCases,
+    private val googleAuthRepository: GoogleAuthRepository,
 ) : ViewModel() {
 
     private val _state = mutableStateOf(LoginState())
@@ -33,29 +34,9 @@ class LoginViewModel
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow: SharedFlow<UiEvent> = _eventFlow
 
-
     init {
         viewModelScope.launch {
             googleAuthRepository.signOut()
-        }
-    }
-
-    fun onSignInResult(intent: Intent) {
-        viewModelScope.launch {
-            googleAuthRepository.signInWithIntent(intent)
-            // aktualizacja UI lub nawigacja po pomyślnym logowaniu
-        }
-    }
-    fun handleSignInResult(data: Intent?) {
-        viewModelScope.launch {
-            try {
-                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-                val account = task.getResult(ApiException::class.java)
-                // Następnie możesz użyć account.getIdToken() i przekazać token do Firebase lub innego systemu backend.
-                googleAuthRepository.signInWithGoogleAccount(account)
-            } catch (e: ApiException) {
-                // Obsłuż wyjątek, może być konieczne wyświetlenie komunikatu o błędzie.
-            }
         }
     }
 
@@ -73,22 +54,37 @@ class LoginViewModel
                 TODO()
             }
 
-            is LoginEvent.GoogleSignIn -> {
-                viewModelScope.launch {
-//                    googleAuthRepository.signIn()?.let { intentSender ->
-//                        _eventFlow.emit(UiEvent.LaunchOneTapSignIn(intentSender))
-//                    }
-                    googleAuthRepository.signInWithGoogle().let{
-                        _eventFlow.emit(UiEvent.BasicGoogleSignIn(it))
+            is LoginEvent.GoogleSignInClick -> {
+                loginUseCases.oneTapGoogleSignIn().onEach {
+                    when (it) {
+                        is Resource.Success -> {
+                            it.data?.let { intentSender ->
+                                _eventFlow.emit(UiEvent.LaunchOneTapSignIn(intentSender))
+                            } ?: run {
+                                loginUseCases.basicGoogleSignIn().let { intent ->
+                                    _eventFlow.emit(UiEvent.BasicGoogleSignIn(intent))
+                                }
+                            }
+                        }
+
+                        is Resource.Error -> {
+                            loginUseCases.basicGoogleSignIn().let { intent ->
+                                _eventFlow.emit(UiEvent.BasicGoogleSignIn(intent))
+                            }
+                        }
+
+                        is Resource.Loading -> {
+
+                        }
+
                     }
-                }
+                }.launchIn(viewModelScope)
             }
 
             is LoginEvent.SignIn -> {
-                login(
+                loginUseCases.login(
                     LoginData(
-                        email = _state.value.email,
-                        password = _state.value.password
+                        email = _state.value.email, password = _state.value.password
                     )
                 ).onEach {
                     when (it) {
@@ -113,6 +109,44 @@ class LoginViewModel
                             _state.value = _state.value.copy(
                                 isLoading = false
                             )
+                        }
+                    }
+                }.launchIn(viewModelScope)
+            }
+
+            is LoginEvent.OneTapSignIn -> {
+
+                loginUseCases.completeOneTapSignIn(event.intent).onEach {
+                    when (it) {
+                        is Resource.Error -> {
+                            _eventFlow.emit(UiEvent.ShowSnackbar(it.message ?: "Unknown error"))
+                        }
+
+                        is Resource.Loading -> {
+
+                        }
+
+                        is Resource.Success -> {
+                            _eventFlow.emit(UiEvent.MenuNavigate)
+                        }
+                    }
+                }.launchIn(viewModelScope)
+
+            }
+
+            is LoginEvent.StandardGoogleSignIn -> {
+                loginUseCases.completeGoogleSignIn(event.intent).onEach {
+                    when (it) {
+                        is Resource.Error -> {
+                            _eventFlow.emit(UiEvent.ShowSnackbar(it.message ?: "Unknown error"))
+                        }
+
+                        is Resource.Loading -> {
+
+                        }
+
+                        is Resource.Success -> {
+                            _eventFlow.emit(UiEvent.MenuNavigate)
                         }
                     }
                 }.launchIn(viewModelScope)

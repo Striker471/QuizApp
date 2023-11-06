@@ -6,8 +6,11 @@ import android.content.IntentSender
 import com.example.quizapp.R
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.CancellationException
@@ -21,36 +24,30 @@ class GoogleAuthRepository @Inject constructor(
     private val googleSignInClient: GoogleSignInClient
 ) {
 
-    suspend fun signIn(): IntentSender? {
-        val result = try {
-            oneTapClient.beginSignIn(
-                buildSignInRequest()
-            ).await()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            if (e is CancellationException) throw e
-            null
-        }
+    suspend fun beginOneTapSignIn(): IntentSender? {
+        val result = oneTapClient.beginSignIn(
+            buildSignInRequest()
+        ).await()
         return result?.pendingIntent?.intentSender
     }
 
-    suspend fun signInWithIntent(intent: Intent) {
+    suspend fun handleOneTapSignInWithIntent(intent: Intent) {
         val credential = oneTapClient.getSignInCredentialFromIntent(intent)
         val googleIdToken = credential.googleIdToken
         val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken, null)
         firebaseAuth.signInWithCredential(googleCredentials).await()
     }
 
-    fun signInWithGoogle(): Intent {
+    fun getGoogleSignInIntent(): Intent {
         return googleSignInClient.signInIntent
     }
 
-    suspend fun signInWithGoogleAccount(account: GoogleSignInAccount) {
-        val googleIdToken = account.idToken
-        // Zakładamy, że używasz Firebase Authentication
+    suspend fun signInWithGoogleAccount(intent: Intent) {
+        val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
+            .getResult(ApiException::class.java)
+        val googleIdToken = task.idToken
         val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken, null)
         firebaseAuth.signInWithCredential(googleCredentials).await()
-        // Aktualizacja UI lub nawigacja po pomyślnym logowaniu
     }
 
     suspend fun signOut() {

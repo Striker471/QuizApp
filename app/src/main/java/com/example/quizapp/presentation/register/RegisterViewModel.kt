@@ -62,11 +62,7 @@ class RegisterViewModel
                 register(registerData).onEach {
                     when (it) {
                         is Resource.Success -> {
-                            _eventFlow.emit(
-                                UiEvent.ShowSnackbar(
-                                    "Succeeded registration"
-                                )
-                            )
+                            _eventFlow.emit(UiEvent.ShowSnackbar("Succeeded registration"))
                             _state.value = RegisterState()
                         }
 
@@ -75,11 +71,7 @@ class RegisterViewModel
                         }
 
                         is Resource.Error -> {
-                            _eventFlow.emit(
-                                UiEvent.ShowSnackbar(
-                                    it.message ?: "Unknown error"
-                                )
-                            )
+                            _eventFlow.emit(UiEvent.ShowSnackbar(it.message ?: "Unknown error"))
                         }
                     }
                 }.launchIn(viewModelScope)

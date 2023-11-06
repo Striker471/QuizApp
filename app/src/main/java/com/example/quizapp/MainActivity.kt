@@ -19,6 +19,7 @@ import com.example.quizapp.presentation.menu.MenuScreen
 import com.example.quizapp.presentation.register.RegisterScreen
 import com.example.quizapp.presentation.reset_password.ResetPasswordScreen
 import com.example.quizapp.presentation.start.StartScreen
+import com.example.quizapp.presentation.util.NestedGraph
 import com.example.quizapp.presentation.util.Screen
 import com.example.quizapp.ui.theme.QuizAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,22 +43,34 @@ class MainActivity : ComponentActivity() {
 //                    ResetPasswordScreen()
                     NavHost(
                         navController = navController,
-                        startDestination = Screen.StartScreen.route
+                        startDestination = NestedGraph.AuthGraph.route
                     ) {
-                        composable(Screen.StartScreen.route){
-                            StartScreen(navController)
+                        navigation(
+                            startDestination = NestedGraph.AuthGraph.startDestination,
+                            route = NestedGraph.AuthGraph.route
+                        ) {
+                            composable(Screen.StartScreen.route) {
+                                StartScreen(navController)
+                            }
+                            composable(Screen.LoginScreen.route) {
+                                LoginScreen(navController)
+                            }
+                            composable(Screen.RegisterScreen.route) {
+                                RegisterScreen(navController)
+                            }
+                            composable(Screen.ResetPasswordScreen.route) {
+                                ResetPasswordScreen(navController = navController)
+                            }
+
                         }
-                        composable(Screen.LoginScreen.route){
-                            LoginScreen(navController)
-                        }
-                        composable(Screen.RegisterScreen.route){
-                            RegisterScreen(navController)
-                        }
-                        composable(Screen.ResetPasswordScreen.route){
-                            ResetPasswordScreen(navController = navController)
-                        }
-                        composable(Screen.MenuScreen.route){
-                            MenuScreen(navController = navController)
+                        navigation(
+                            startDestination = NestedGraph.MenuGraph.startDestination,
+                            route = NestedGraph.MenuGraph.route
+                        ) {
+
+                            composable(Screen.MenuScreen.route) {
+                                MenuScreen(navController = navController)
+                            }
                         }
                     }
                 }
@@ -66,15 +79,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
-//actions = {
-//    IconButton(onClick = { /* do something */ }) {
-//        Icon(
-//            imageVector = Icons.Filled.Menu,
-//            contentDescription = "Localized description"
-//        )
-//    }
-//},
 
 @Composable
 fun Greeting(name: String) {

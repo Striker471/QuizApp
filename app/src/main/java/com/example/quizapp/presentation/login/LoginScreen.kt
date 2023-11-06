@@ -48,19 +48,18 @@ fun LoginScreen(
         contract = ActivityResultContracts.StartIntentSenderForResult(),
         onResult = { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.let { intent ->
-                    viewModel.onSignInResult(intent)
+                result.data?.let {
+                    viewModel.onEvent(LoginEvent.OneTapSignIn(it))
                 }
             }
         })
-
 
     val basicLoginLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = { result ->
             if (result.resultCode == Activity.RESULT_OK)
-                result.data?.let {
-                    viewModel.handleSignInResult(it)
+                    result.data?.let {
+                    viewModel.onEvent(LoginEvent.StandardGoogleSignIn(it))
                 }
         }
     )
@@ -134,7 +133,7 @@ fun LoginScreen(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedButtonWithImage(
-                    onClick = { viewModel.onEvent(LoginEvent.GoogleSignIn) },
+                    onClick = { viewModel.onEvent(LoginEvent.GoogleSignInClick) },
                     text = stringResource(R.string.continue_with_google),
                     icon = R.drawable.google_icon
                 )
