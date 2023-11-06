@@ -34,11 +34,11 @@ class LoginViewModel
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow: SharedFlow<UiEvent> = _eventFlow
 
-    init {
-        viewModelScope.launch {
-            googleAuthRepository.signOut()
-        }
-    }
+//    init {
+//        viewModelScope.launch {
+//            googleAuthRepository.signOut()
+//        }
+//    }
 
     fun onEvent(event: LoginEvent) {
         when (event) {

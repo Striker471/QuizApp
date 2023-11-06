@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +23,7 @@ import com.example.quizapp.presentation.components.CenterTopAppBar
 import com.example.quizapp.presentation.components.MainActionButton
 import com.example.quizapp.presentation.components.MainOutlinedTextField
 import com.example.quizapp.presentation.components.OutlinedButtonWithImage
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun ResetPasswordScreen(
@@ -30,8 +32,10 @@ fun ResetPasswordScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
+    val state by viewModel.state
+
     LaunchedEffect(key1 = true) {
-        viewModel.eventFlow.collect {
+        viewModel.eventFlow.collectLatest {
             snackbarHostState.showSnackbar(it)
         }
     }
@@ -80,7 +84,7 @@ fun ResetPasswordScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
             MainOutlinedTextField(
-                text = viewModel.email.value,
+                text = state.email,
                 onValueChange = { viewModel.onEmailChange(it) },
                 label = stringResource(R.string.email)
             )
@@ -89,7 +93,8 @@ fun ResetPasswordScreen(
                 onClick = { viewModel.onResetPasswordClick() },
                 text = stringResource(R.string.reset_password),
                 modifier = Modifier
-                    .padding(bottom = 32.dp)
+                    .padding(bottom = 32.dp),
+                enabled = !state.isLoading
             )
         }
     }

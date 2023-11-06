@@ -22,6 +22,7 @@ import com.example.quizapp.R
 import com.example.quizapp.presentation.components.CenterTopAppBar
 import com.example.quizapp.presentation.components.MainActionButton
 import com.example.quizapp.presentation.components.MainOutlinedTextField
+import kotlinx.coroutines.flow.collectLatest
 
 
 @Composable
@@ -33,7 +34,7 @@ fun RegisterScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(key1 = true) {
-        viewModel.eventFlow.collect {
+        viewModel.eventFlow.collectLatest {
             when (it) {
                 is RegisterViewModel.UiEvent.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(it.message)
@@ -114,7 +115,8 @@ fun RegisterScreen(
             MainActionButton(
                 onClick = { viewModel.onEvent(RegisterEvent.SignUp) },
                 text = stringResource(R.string.sign_up),
-                modifier = Modifier.padding(bottom = 32.dp)
+                modifier = Modifier.padding(bottom = 32.dp),
+                enabled = !state.isLoading
             )
         }
     }

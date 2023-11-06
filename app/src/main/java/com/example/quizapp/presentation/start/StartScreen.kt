@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.quizapp.R
 import com.example.quizapp.presentation.components.MainActionButton
+import com.example.quizapp.presentation.util.NestedGraph
 import com.example.quizapp.presentation.util.Screen
 
 @Composable
@@ -32,10 +33,12 @@ fun StartScreen(
 ) {
 
     LaunchedEffect(Unit) {
-//        if (viewModel.checkIfUserIsSignedIn())
-//            navController.navigate(Screen.MenuScreen.route) {
-//                popUpTo(Screen.StartScreen.route) { inclusive = true }
-//            }
+        if (viewModel.checkIfUserIsSignedIn())
+            navController.navigate(NestedGraph.MenuGraph.route) {
+                popUpTo(NestedGraph.AuthGraph.route) {
+                    inclusive = true
+                }
+            }
     }
 
     Column(
