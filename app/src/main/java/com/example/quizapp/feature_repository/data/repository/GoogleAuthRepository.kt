@@ -19,14 +19,14 @@ import javax.inject.Inject
 
 class GoogleAuthRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
-    private val context: Context,
     private val oneTapClient: SignInClient,
-    private val googleSignInClient: GoogleSignInClient
+    private val googleSignInClient: GoogleSignInClient,
+    private val signInRequest: BeginSignInRequest
 ) {
 
     suspend fun beginOneTapSignIn(): IntentSender? {
         val result = oneTapClient.beginSignIn(
-            buildSignInRequest()
+            signInRequest
         ).await()
         return result?.pendingIntent?.intentSender
     }
@@ -67,19 +67,5 @@ class GoogleAuthRepository @Inject constructor(
 //            profilePictureUrl = photoUrl?.toString()
 //        )
 //    }
-
-    private fun buildSignInRequest(): BeginSignInRequest {
-        return BeginSignInRequest.Builder()
-            .setGoogleIdTokenRequestOptions(
-                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                    .setSupported(true)
-                    .setFilterByAuthorizedAccounts(false)
-                    .setServerClientId(context.getString(R.string.web_client_id))
-                    .build()
-            )
-            .setAutoSelectEnabled(true)
-            .build()
-    }
-
 
 }

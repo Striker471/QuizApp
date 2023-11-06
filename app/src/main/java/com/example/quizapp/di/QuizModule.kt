@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.quizapp.R
 import com.example.quizapp.domain.util.error.ExceptionHandler
 import com.example.quizapp.domain.util.error.createDefaultHandler
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -55,6 +56,21 @@ object QuizModule {
             .build()
 
         return GoogleSignIn.getClient(context, signInOptions)
+    }
+
+    @Provides
+    @Singleton
+    fun buildSignInRequest(context :Context): BeginSignInRequest {
+        return BeginSignInRequest.Builder()
+            .setGoogleIdTokenRequestOptions(
+                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                    .setSupported(true)
+                    .setFilterByAuthorizedAccounts(false)
+                    .setServerClientId(context.getString(R.string.web_client_id))
+                    .build()
+            )
+            .setAutoSelectEnabled(true)
+            .build()
     }
 
 }
