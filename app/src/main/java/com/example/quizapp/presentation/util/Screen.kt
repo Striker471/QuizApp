@@ -8,8 +8,9 @@ sealed class Screen(val route: String) {
     object MenuScreen : Screen("menu_screen")
     object CreateQuizScreen : Screen("create_quiz_screen")
     object CreateQuestionScreen : Screen("create_question_screen")
-
-
+    object ProfileScreen : Screen("profile_screen")
+    object MyQuizzesScreen : Screen("my_quizzes_screen")
+    object LibraryScreen : Screen("library_screen")
 
 
 }

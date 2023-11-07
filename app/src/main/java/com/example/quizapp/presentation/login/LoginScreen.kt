@@ -33,6 +33,7 @@ import com.example.quizapp.presentation.components.MainActionButton
 import com.example.quizapp.presentation.components.MainOutlinedTextField
 import com.example.quizapp.presentation.components.OutlinedButtonWithImage
 import com.example.quizapp.presentation.register.RegisterViewModel
+import com.example.quizapp.presentation.util.NestedGraph
 import com.example.quizapp.presentation.util.Screen
 import kotlinx.coroutines.flow.collectLatest
 
@@ -58,7 +59,7 @@ fun LoginScreen(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = { result ->
             if (result.resultCode == Activity.RESULT_OK)
-                    result.data?.let {
+                result.data?.let {
                     viewModel.onEvent(LoginEvent.StandardGoogleSignIn(it))
                 }
         }
@@ -72,8 +73,11 @@ fun LoginScreen(
                 }
 
                 is LoginViewModel.UiEvent.MenuNavigate -> {
-                    navController.navigate(Screen.MenuScreen.route)
-
+                    navController.navigate(NestedGraph.MenuGraph.route) {
+                        popUpTo(NestedGraph.AuthGraph.route) {
+                            inclusive = true
+                        }
+                    }
                     //popup i nested graph do zrobienia
                 }
 
@@ -131,21 +135,20 @@ fun LoginScreen(
                     text = stringResource(R.string.hello_there),
                     style = MaterialTheme.typography.headlineMedium,
                 )
-                Spacer(modifier = Modifier.height(56.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 OutlinedButtonWithImage(
                     onClick = { viewModel.onEvent(LoginEvent.GoogleSignInClick) },
                     text = stringResource(R.string.continue_with_google),
                     icon = R.drawable.google_icon
                 )
             }
-            Spacer(modifier = Modifier.height(56.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             Text(stringResource(R.string.or))
             Spacer(modifier = Modifier.height(16.dp))
             MainOutlinedTextField(
                 text = state.email,
                 onValueChange = { viewModel.onEvent(LoginEvent.EnteredEmail(it)) },
                 label = stringResource(R.string.email)
-
             )
             Spacer(modifier = Modifier.height(16.dp))
             MainOutlinedTextField(
@@ -154,25 +157,6 @@ fun LoginScreen(
                 label = stringResource(R.string.password)
             )
             Spacer(modifier = Modifier.height(32.dp))
-            val checkedState = remember { mutableStateOf(true) }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-
-            ) {
-                Checkbox(
-                    checked = checkedState.value,
-                    onCheckedChange = { checkedState.value = it }
-                )
-                Text(
-                    text = stringResource(R.string.rembember_me),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = stringResource(R.string.forgot_password),
                 style = TextStyle(

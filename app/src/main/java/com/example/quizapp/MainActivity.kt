@@ -14,8 +14,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.quizapp.presentation.create_quiz.CreateQuizScreen
+import com.example.quizapp.presentation.library.LibraryScreen
 import com.example.quizapp.presentation.login.LoginScreen
 import com.example.quizapp.presentation.menu.MenuScreen
+import com.example.quizapp.presentation.my_quizzes.MyQuizzesScreen
+import com.example.quizapp.presentation.profile.ProfileScreen
 import com.example.quizapp.presentation.register.RegisterScreen
 import com.example.quizapp.presentation.reset_password.ResetPasswordScreen
 import com.example.quizapp.presentation.start.StartScreen
@@ -34,13 +37,6 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = colorResource(R.color.surface)) {
-//                    MenuScreen()
-//                    CreateQuizScreen()
-//                    RegisterScreen()
-//                    CreateQuestionScreen(navController)
-//                    StartScreen()
-//                    LoginScreen()
-//                    ResetPasswordScreen()
                     NavHost(
                         navController = navController,
                         startDestination = NestedGraph.AuthGraph.route
@@ -50,18 +46,17 @@ class MainActivity : ComponentActivity() {
                             route = NestedGraph.AuthGraph.route
                         ) {
                             composable(Screen.StartScreen.route) {
-                                StartScreen(navController)
+                                StartScreen(navController = navController)
                             }
                             composable(Screen.LoginScreen.route) {
-                                LoginScreen(navController)
+                                LoginScreen(navController = navController)
                             }
                             composable(Screen.RegisterScreen.route) {
-                                RegisterScreen(navController)
+                                RegisterScreen(navController = navController)
                             }
                             composable(Screen.ResetPasswordScreen.route) {
                                 ResetPasswordScreen(navController = navController)
                             }
-
                         }
                         navigation(
                             startDestination = NestedGraph.MenuGraph.startDestination,
@@ -71,24 +66,19 @@ class MainActivity : ComponentActivity() {
                             composable(Screen.MenuScreen.route) {
                                 MenuScreen(navController = navController)
                             }
+                            composable(Screen.ProfileScreen.route) {
+                                ProfileScreen(navController = navController)
+                            }
+                            composable(Screen.LibraryScreen.route) {
+                                LibraryScreen(navController = navController)
+                            }
+                            composable(Screen.MyQuizzesScreen.route) {
+                                MyQuizzesScreen(navController = navController)
+                            }
                         }
                     }
                 }
             }
         }
-    }
-}
-
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    QuizAppTheme {
-        Greeting("Android")
     }
 }

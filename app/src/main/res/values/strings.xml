@@ -36,6 +36,10 @@
     <string name="correct_answear">Correct Answear</string>
     <string name="delete">Delete</string>
     <string name="finish">Finish</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="library">Library</string>
+    <string name="my_quizzes">My Quizzes</string>
 
 
 </resources>

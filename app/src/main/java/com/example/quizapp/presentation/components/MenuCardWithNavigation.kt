@@ -18,21 +18,23 @@ import com.example.quizapp.R
 
 @Composable
 fun MenuCardWithNavigation(
-    title: String
-){
+    title: String,
+    onClick: () -> Unit
+) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .padding(horizontal = 24.dp),
         verticalAlignment = Alignment.CenterVertically
-    ){
+    ) {
         Text(
             text = title,
             style = MaterialTheme.typography.headlineMedium
         )
         Row(
             modifier = Modifier.clickable(onClick = {
-
+                onClick
             }),
             verticalAlignment = Alignment.CenterVertically
         ) {
