@@ -1,4 +1,4 @@
-package com.example.quizapp.presentation.register
+package com.example.quizapp.presentation.auth_graph.register
 
 
 import androidx.compose.foundation.background

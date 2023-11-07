@@ -1,4 +1,4 @@
-package com.example.quizapp.presentation.reset_password
+package com.example.quizapp.presentation.auth_graph.reset_password
 
 data class ResetPasswordState(
     val email: String = "",

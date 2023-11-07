@@ -1,4 +1,4 @@
-package com.example.quizapp.presentation.start
+package com.example.quizapp.presentation.auth_graph.start
 
 import androidx.lifecycle.ViewModel
 import com.example.quizapp.domain.use_case.auth.IsUserSignedIn

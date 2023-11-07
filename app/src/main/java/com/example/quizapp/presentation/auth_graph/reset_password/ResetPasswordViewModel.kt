@@ -1,4 +1,4 @@
-package com.example.quizapp.presentation.reset_password
+package com.example.quizapp.presentation.auth_graph.reset_password
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

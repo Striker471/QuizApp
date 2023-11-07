@@ -1,4 +1,4 @@
-package com.example.quizapp.presentation.login
+package com.example.quizapp.presentation.auth_graph.login
 
 data class LoginState(
     val email: String = "",

@@ -1,4 +1,4 @@
-package com.example.quizapp.presentation.reset_password
+package com.example.quizapp.presentation.auth_graph.reset_password
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

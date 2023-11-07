@@ -1,4 +1,4 @@
-package com.example.quizapp.presentation.create_question
+package com.example.quizapp.presentation.menu_graph.create_question
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

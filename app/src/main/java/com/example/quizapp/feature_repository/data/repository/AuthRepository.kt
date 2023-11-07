@@ -37,7 +37,7 @@ class AuthRepository @Inject constructor(
 
     fun logOut() {
         firebaseAuth.signOut()
-        firebaseFirestore.clearPersistence()
+//        firebaseFirestore.clearPersistence()
     }
 
     fun getSignedInUser(): FirebaseUser? {

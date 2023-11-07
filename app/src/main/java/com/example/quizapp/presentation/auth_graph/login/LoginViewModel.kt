@@ -1,4 +1,4 @@
-package com.example.quizapp.presentation.login
+package com.example.quizapp.presentation.auth_graph.login
 
 import android.content.Intent
 import android.content.IntentSender

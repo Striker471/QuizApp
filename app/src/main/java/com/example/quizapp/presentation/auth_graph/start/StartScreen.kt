@@ -1,4 +1,4 @@
-package com.example.quizapp.presentation.start
+package com.example.quizapp.presentation.auth_graph.start
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

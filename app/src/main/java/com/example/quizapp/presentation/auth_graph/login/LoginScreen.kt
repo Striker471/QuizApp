@@ -1,4 +1,4 @@
-package com.example.quizapp.presentation.login
+package com.example.quizapp.presentation.auth_graph.login
 
 import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -32,7 +32,7 @@ import com.example.quizapp.presentation.components.CenterTopAppBar
 import com.example.quizapp.presentation.components.MainActionButton
 import com.example.quizapp.presentation.components.MainOutlinedTextField
 import com.example.quizapp.presentation.components.OutlinedButtonWithImage
-import com.example.quizapp.presentation.register.RegisterViewModel
+import com.example.quizapp.presentation.auth_graph.register.RegisterViewModel
 import com.example.quizapp.presentation.util.NestedGraph
 import com.example.quizapp.presentation.util.Screen
 import kotlinx.coroutines.flow.collectLatest

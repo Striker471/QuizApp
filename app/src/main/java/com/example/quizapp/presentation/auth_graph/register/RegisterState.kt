@@ -1,4 +1,4 @@
-package com.example.quizapp.presentation.register
+package com.example.quizapp.presentation.auth_graph.register
 
 data class RegisterState(
     val userName: String = "",

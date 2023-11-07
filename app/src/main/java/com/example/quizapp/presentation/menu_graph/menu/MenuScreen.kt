@@ -1,4 +1,4 @@
-package com.example.quizapp.presentation.menu
+package com.example.quizapp.presentation.menu_graph.menu
 
 
 import androidx.compose.foundation.layout.*
@@ -35,7 +35,9 @@ fun MenuScreen(
             CenterTopAppBar(
                 titleText = stringResource(R.string.quizmania),
                 navigationIcon = {
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = {
+                        viewModel.logOut()
+                    }) {
                         Icon(
                             imageVector = Icons.Default.Menu,
                             contentDescription = "Menu"
