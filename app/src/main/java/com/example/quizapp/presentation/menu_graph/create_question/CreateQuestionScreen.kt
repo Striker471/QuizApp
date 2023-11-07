@@ -1,5 +1,6 @@
 package com.example.quizapp.presentation.menu_graph.create_question
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -7,6 +8,9 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -30,7 +34,17 @@ fun CreateQuestionScreen(
     Scaffold(
         topBar = {
             CenterTopAppBar(
-                titleText = stringResource(R.string.create_quiz)
+                titleText = stringResource(R.string.create_quiz),
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.popBackStack()
+                    }) {
+                        Image(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = null
+                        )
+                    }
+                }
             )
         }
     ) { innerPadding ->
@@ -81,14 +95,15 @@ fun CreateQuestionScreen(
                 }
                 item {
                     Box(
-                        modifier = Modifier.clickable {
-                            list.add(list.size + 1)
-                            listState.value = list
-                            coroutineScope.launch {
-                                lazyListState.animateScrollToItem(list.size -1)
-                                selectedItem = list.size - 1
+                        modifier = Modifier
+                            .clickable {
+                                list.add(list.size + 1)
+                                listState.value = list
+                                coroutineScope.launch {
+                                    lazyListState.animateScrollToItem(list.size - 1)
+                                    selectedItem = list.size - 1
+                                }
                             }
-                        }
                             .size(36.dp),
                         contentAlignment = Alignment.Center
                     ) {

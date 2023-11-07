@@ -21,10 +21,10 @@ import com.example.quizapp.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddImageCard(
-
+    onClick: () -> Unit
 ) {
     ElevatedCard(
-        onClick = {},
+        onClick = onClick,
         modifier = Modifier
             .height(182.dp)
             .fillMaxWidth(),

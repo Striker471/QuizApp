@@ -1,5 +1,6 @@
 package com.example.quizapp.presentation.components
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -10,7 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -18,17 +21,14 @@ import androidx.compose.ui.unit.sp
 import com.example.quizapp.R
 
 @Composable
-fun QuizCard(
+fun QuizCardMyProfile(
     title: String = "Quiz losowy ",
-    profileUrl: String = "",
     quizUrl: String = "",
-    userName: String = "Agnieszka Mrozinska-Skarie",
-
+    views: Int = 0
 ) {
-
     Card(
         modifier = Modifier
-            .size(160.dp, 210.dp)
+            .size(160.dp, 190.dp)
             .clickable { }
     ) {
         Column(
@@ -36,7 +36,7 @@ fun QuizCard(
         ) {
             Box(
                 modifier = Modifier
-                    .weight(6.2f)
+                    .weight(6.9f)
                     .fillMaxWidth()
             ) {
                 Image(
@@ -48,13 +48,13 @@ fun QuizCard(
             }
             Box(
                 modifier = Modifier
-                    .weight(3.8f)
+                    .weight(3.1f)
                     .fillMaxWidth()
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = title,
                         modifier = Modifier
@@ -68,28 +68,17 @@ fun QuizCard(
                         overflow = TextOverflow.Ellipsis
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    Row(
+                    Text(
+                        text = stringResource(R.string.views) + ": " + views,
+                        style = MaterialTheme.typography.bodySmall,
+                        fontSize = 10.sp,
+                        lineHeight = 15.sp,
+                        overflow = TextOverflow.Ellipsis,
+                        color = colorResource(R.color.grey_text),
                         modifier = Modifier
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Image(
-                            painterResource(R.drawable.avatar_1),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(24.dp)
-                        )
-                        Spacer(modifier = Modifier.width(2.dp))
-                        Text(
-                            text = userName,
-                            style = MaterialTheme.typography.bodySmall,
-                            fontSize = 10.sp,
-                            lineHeight = 15.sp,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
+                            .padding(start = 4.dp)
+                    )
+
                     Spacer(modifier = Modifier.height(2.dp))
                 }
             }

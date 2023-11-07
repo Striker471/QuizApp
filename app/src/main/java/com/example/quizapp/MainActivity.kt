@@ -20,6 +20,8 @@ import com.example.quizapp.presentation.menu_graph.profile.ProfileScreen
 import com.example.quizapp.presentation.auth_graph.register.RegisterScreen
 import com.example.quizapp.presentation.auth_graph.reset_password.ResetPasswordScreen
 import com.example.quizapp.presentation.auth_graph.start.StartScreen
+import com.example.quizapp.presentation.menu_graph.create_question.CreateQuestionScreen
+import com.example.quizapp.presentation.menu_graph.create_quiz.CreateQuizScreen
 import com.example.quizapp.presentation.util.NestedGraph
 import com.example.quizapp.presentation.util.Screen
 import com.example.quizapp.ui.theme.QuizAppTheme
@@ -72,6 +74,12 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(Screen.MyQuizzesScreen.route) {
                                 MyQuizzesScreen(navController = navController)
+                            }
+                            composable(Screen.CreateQuizScreen.route){
+                                CreateQuizScreen(navController = navController)
+                            }
+                            composable(Screen.CreateQuestionScreen.route){
+                                CreateQuestionScreen(navController = navController)
                             }
                         }
                     }

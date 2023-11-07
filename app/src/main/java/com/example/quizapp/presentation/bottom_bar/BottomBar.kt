@@ -27,7 +27,7 @@ import com.example.quizapp.presentation.util.Screen
 @Composable
 fun BottomBar(
     navController: NavController,
-    viewModel: BottomBarSharedViewModel = hiltViewModel()
+//    viewModel: BottomBarSharedViewModel = hiltViewModel()
 ) {
 //    val navBackStackEntry by navController.currentBackStackEntryAsState()
 //    val currentRoute = navBackStackEntry?.destination?.route
