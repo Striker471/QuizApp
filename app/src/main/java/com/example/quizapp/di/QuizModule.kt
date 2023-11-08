@@ -2,8 +2,8 @@ package com.example.quizapp.di
 
 import android.content.Context
 import com.example.quizapp.R
-import com.example.quizapp.domain.util.error.ExceptionHandler
-import com.example.quizapp.domain.util.error.createDefaultHandler
+import com.example.quizapp.feature.domain.util.error.ExceptionHandler
+import com.example.quizapp.feature.domain.util.error.createDefaultHandler
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
