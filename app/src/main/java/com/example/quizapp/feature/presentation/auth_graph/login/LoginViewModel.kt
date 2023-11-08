@@ -2,7 +2,6 @@ package com.example.quizapp.feature.presentation.auth_graph.login
 
 import android.content.Intent
 import android.content.IntentSender
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -10,22 +9,17 @@ import androidx.lifecycle.viewModelScope
 import com.example.quizapp.feature.domain.model.LoginData
 import com.example.quizapp.feature.domain.use_case.auth.LoginUseCases
 import com.example.quizapp.feature.domain.util.Resource
-import com.example.quizapp.feature.data.repository.GoogleAuthRepository
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.common.api.ApiException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel
 @Inject constructor(
     private val loginUseCases: LoginUseCases,
-    private val googleAuthRepository: GoogleAuthRepository,
 ) : ViewModel() {
 
     private val _state = mutableStateOf(LoginState())
@@ -34,23 +28,17 @@ class LoginViewModel
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow: SharedFlow<UiEvent> = _eventFlow
 
-//    init {
-//        viewModelScope.launch {
-//            googleAuthRepository.signOut()
-//        }
-//    }
-
-    fun onEvent(event: com.example.quizapp.feature.presentation.auth_graph.login.LoginEvent) {
+    fun onEvent(event: LoginEvent) {
         when (event) {
-            is com.example.quizapp.feature.presentation.auth_graph.login.LoginEvent.EnteredEmail -> {
+            is LoginEvent.EnteredEmail -> {
                 _state.value = _state.value.copy(email = event.value)
             }
 
-            is com.example.quizapp.feature.presentation.auth_graph.login.LoginEvent.EnteredPassword -> {
+            is LoginEvent.EnteredPassword -> {
                 _state.value = _state.value.copy(password = event.value)
             }
 
-            is com.example.quizapp.feature.presentation.auth_graph.login.LoginEvent.GoogleSignInClick -> {
+            is LoginEvent.GoogleSignInClick -> {
                 loginUseCases.oneTapGoogleSignIn().onEach {
                     when (it) {
                         is Resource.Success -> {
@@ -77,7 +65,7 @@ class LoginViewModel
                 }.launchIn(viewModelScope)
             }
 
-            is com.example.quizapp.feature.presentation.auth_graph.login.LoginEvent.SignIn -> {
+            is LoginEvent.SignIn -> {
                 loginUseCases.login(
                     LoginData(
                         email = _state.value.email, password = _state.value.password
@@ -110,7 +98,7 @@ class LoginViewModel
                 }.launchIn(viewModelScope)
             }
 
-            is com.example.quizapp.feature.presentation.auth_graph.login.LoginEvent.OneTapSignIn -> {
+            is LoginEvent.OneTapSignIn -> {
 
                 loginUseCases.completeOneTapSignIn(event.intent).onEach {
                     when (it) {
@@ -130,7 +118,7 @@ class LoginViewModel
 
             }
 
-            is com.example.quizapp.feature.presentation.auth_graph.login.LoginEvent.StandardGoogleSignIn -> {
+            is LoginEvent.StandardGoogleSignIn -> {
                 loginUseCases.completeGoogleSignIn(event.intent).onEach {
                     when (it) {
                         is Resource.Error -> {

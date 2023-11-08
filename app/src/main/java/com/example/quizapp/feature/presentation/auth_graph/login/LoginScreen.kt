@@ -13,7 +13,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,7 +48,7 @@ fun LoginScreen(
         onResult = { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.let {
-                    viewModel.onEvent(com.example.quizapp.feature.presentation.auth_graph.login.LoginEvent.OneTapSignIn(it))
+                    viewModel.onEvent(LoginEvent.OneTapSignIn(it))
                 }
             }
         })
@@ -59,7 +58,7 @@ fun LoginScreen(
         onResult = { result ->
             if (result.resultCode == Activity.RESULT_OK)
                 result.data?.let {
-                    viewModel.onEvent(com.example.quizapp.feature.presentation.auth_graph.login.LoginEvent.StandardGoogleSignIn(it))
+                    viewModel.onEvent(LoginEvent.StandardGoogleSignIn(it))
                 }
         }
     )
@@ -136,7 +135,7 @@ fun LoginScreen(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedButtonWithImage(
-                    onClick = { viewModel.onEvent(com.example.quizapp.feature.presentation.auth_graph.login.LoginEvent.GoogleSignInClick) },
+                    onClick = { viewModel.onEvent(LoginEvent.GoogleSignInClick) },
                     text = stringResource(R.string.continue_with_google),
                     icon = R.drawable.google_icon
                 )
@@ -146,13 +145,13 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(16.dp))
             MainOutlinedTextField(
                 text = state.email,
-                onValueChange = { viewModel.onEvent(com.example.quizapp.feature.presentation.auth_graph.login.LoginEvent.EnteredEmail(it)) },
+                onValueChange = { viewModel.onEvent(LoginEvent.EnteredEmail(it)) },
                 label = stringResource(R.string.email)
             )
             Spacer(modifier = Modifier.height(16.dp))
             MainOutlinedTextField(
                 text = state.password,
-                onValueChange = { viewModel.onEvent(com.example.quizapp.feature.presentation.auth_graph.login.LoginEvent.EnteredPassword(it)) },
+                onValueChange = { viewModel.onEvent(LoginEvent.EnteredPassword(it)) },
                 label = stringResource(R.string.password)
             )
             Spacer(modifier = Modifier.height(32.dp))
@@ -171,7 +170,7 @@ fun LoginScreen(
             )
             Spacer(modifier = Modifier.weight(1f))
             MainActionButton(
-                onClick = { viewModel.onEvent(com.example.quizapp.feature.presentation.auth_graph.login.LoginEvent.SignIn) },
+                onClick = { viewModel.onEvent(LoginEvent.SignIn) },
                 text = stringResource(R.string.sign_in),
                 modifier = Modifier.padding(bottom = 32.dp),
                 enabled = !state.isLoading

@@ -1,9 +1,7 @@
 package com.example.quizapp.feature.data.repository
 
 import com.example.quizapp.feature.domain.model.LoginData
-import com.example.quizapp.feature.domain.model.RegisterData
 import com.example.quizapp.feature.domain.model.RegisterRepositoryData
-import com.example.quizapp.feature.domain.util.error.EmptyUserException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest

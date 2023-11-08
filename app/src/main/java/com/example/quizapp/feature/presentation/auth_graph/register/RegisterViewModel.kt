@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.quizapp.feature.domain.model.RegisterData
 import com.example.quizapp.feature.domain.use_case.auth.Register
 import com.example.quizapp.feature.domain.util.Resource
-import com.example.quizapp.feature.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow

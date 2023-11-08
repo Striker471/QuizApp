@@ -36,7 +36,8 @@ import com.example.quizapp.feature.presentation.components.MainActionButton
 
 @Composable
 fun CreateQuizScreen(
-    navController: NavController, viewModel: CreateQuizViewModel = hiltViewModel()
+    navController: NavController,
+    viewModel: CreateQuizViewModel = hiltViewModel()
 ) {
     val state by viewModel.state
     val selectedImage by viewModel.image
