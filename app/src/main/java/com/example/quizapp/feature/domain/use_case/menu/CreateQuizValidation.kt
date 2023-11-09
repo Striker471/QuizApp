@@ -1,6 +1,5 @@
 package com.example.quizapp.feature.domain.use_case.menu
 
-import com.example.quizapp.feature.domain.model.CreateQuizData
 import com.example.quizapp.feature.domain.model.CreateQuizValidationData
 import com.example.quizapp.feature.domain.use_case.ValidationResult
 import javax.inject.Inject

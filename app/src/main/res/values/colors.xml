@@ -18,6 +18,7 @@
     <color name="purple">#FF6750A4</color>
     <color name="onPurpleButton">#FFFFFFFF</color>
     <color name="image_card">#FFE6E0E9</color>
+    <color name="green_card">#FF8AE8A4</color>
 
 
 </resources>
