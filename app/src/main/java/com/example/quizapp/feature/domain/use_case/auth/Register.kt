@@ -17,7 +17,7 @@ class Register @Inject constructor(
     private val registerValidation: RegisterValidation
 ) {
     operator fun invoke(registerData: RegisterData): Flow<Resource<Unit>> = flow {
-        emit(Resource.Loading())
+        emit(Resource.Loading)
         when (val validationResult = registerValidation(registerData)) {
 
             is ValidationResult.Success -> {

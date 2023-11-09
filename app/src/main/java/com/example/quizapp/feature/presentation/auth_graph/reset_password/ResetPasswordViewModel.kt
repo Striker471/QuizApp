@@ -35,7 +35,7 @@ class ResetPasswordViewModel
         resetPassword(_state.value.email).onEach {
             when (it) {
                 is Resource.Error -> {
-                    _eventFlow.emit(it.message ?: "Unknown error")
+                    _eventFlow.emit(it.message)
                     _state.value = _state.value.copy(
                         isLoading = false
                     )

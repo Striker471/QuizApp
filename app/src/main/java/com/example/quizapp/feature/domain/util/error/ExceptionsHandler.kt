@@ -38,7 +38,7 @@ class HttpExceptionHandler : ExceptionHandler() {
         exception: Throwable
     ) {
         if (exception is HttpException) {
-            Resource.Error<T>(message = exception.localizedMessage ?: "Unknown network error")
+            Resource.Error(message = exception.localizedMessage ?: "Unknown network error")
                 .also { flowCollector.emit(it) }
         } else {
             super.handle(flowCollector, exception)
@@ -52,7 +52,7 @@ class IOExceptionHandler : ExceptionHandler() {
         exception: Throwable
     ) {
         if (exception is IOException) {
-            Resource.Error<T>(
+            Resource.Error(
                 message = exception.localizedMessage ?: "Check Your Internet Connection"
             )
                 .also { flowCollector.emit(it) }
@@ -67,7 +67,7 @@ class GeneralExceptionHandler : ExceptionHandler() {
         flowCollector: FlowCollector<Resource<T>>,
         exception: Throwable
     ) {
-        Resource.Error<T>(message = exception.localizedMessage.orEmpty())
+        Resource.Error(message = exception.localizedMessage.orEmpty())
             .also { flowCollector.emit(it) }
     }
 }

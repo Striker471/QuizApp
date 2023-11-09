@@ -13,7 +13,7 @@ class ResetPassword @Inject constructor(
     private val exceptionHandler: ExceptionHandler
 ) {
     operator fun invoke(email: String): Flow<Resource<Unit>> = flow {
-        emit(Resource.Loading())
+        emit(Resource.Loading)
 
         authRepository.resetPassword(email)
 

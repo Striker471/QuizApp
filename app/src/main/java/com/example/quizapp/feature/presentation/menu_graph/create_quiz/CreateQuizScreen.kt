@@ -14,7 +14,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -32,6 +34,7 @@ import com.example.quizapp.R
 import com.example.quizapp.feature.presentation.components.AddImageCard
 import com.example.quizapp.feature.presentation.components.CenterTopAppBar
 import com.example.quizapp.feature.presentation.components.MainActionButton
+import kotlinx.coroutines.flow.collectLatest
 
 
 @Composable
@@ -41,6 +44,7 @@ fun CreateQuizScreen(
 ) {
     val state by viewModel.state
     val selectedImage by viewModel.image
+    val snackbarHostState = remember { SnackbarHostState() }
 
     val cropImageLauncher = rememberLauncherForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
@@ -59,12 +63,24 @@ fun CreateQuizScreen(
                                 aspectRatioX = 4,
                                 aspectRatioY = 3,
                                 guidelines = CropImageView.Guidelines.ON_TOUCH,
-                                outputCompressFormat = Bitmap.CompressFormat.PNG
+                                outputCompressFormat = Bitmap.CompressFormat.WEBP_LOSSY
                             )
                         )
                     )
                 }
             })
+
+    LaunchedEffect(true){
+        viewModel.eventFlow.collectLatest {
+            when(it){
+                is CreateQuizViewModel.UiEvent.CreateQuestionNavigate -> {
+                }
+                is CreateQuizViewModel.UiEvent.ShowSnackbar -> {
+                    snackbarHostState.showSnackbar(it.message)
+                }
+            }
+        }
+    }
 
 
 
@@ -78,7 +94,11 @@ fun CreateQuizScreen(
                 )
             }
         })
-    }) { innerPadding ->
+    },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(

@@ -1,5 +1,7 @@
 package com.example.quizapp.feature.data.repository
 
+import com.example.quizapp.feature.data.repository.Constants.COLLECTION_USER_PROFILES
+import com.example.quizapp.feature.data.repository.Constants.NULL_FIREBASE_USER
 import com.example.quizapp.feature.domain.model.LoginData
 import com.example.quizapp.feature.domain.model.RegisterRepositoryData
 import com.google.firebase.auth.FirebaseAuth
@@ -25,6 +27,7 @@ class AuthRepository @Inject constructor(
 
         val user = firebaseAuth.currentUser ?: throw Exception(NULL_FIREBASE_USER)
         user.updateProfile(userNameUpdate).await()
+        createUserProfile(registerRepositoryData.userName)
     }
 
     suspend fun login(loginData: LoginData) {
@@ -47,19 +50,17 @@ class AuthRepository @Inject constructor(
         firebaseAuth.sendPasswordResetEmail(email).await()
     }
 
-    suspend fun createUserProfile(registerRepositoryData: RegisterRepositoryData) {
+    suspend fun createUserProfile(userName: String) {
         val userProfileMap = hashMapOf(
-            "userName" to registerRepositoryData.userName,
-            "email" to registerRepositoryData.email,
+            "userName" to userName,
             "createdAt" to FieldValue.serverTimestamp()
         )
 
-        val uid = firebaseAuth.currentUser?.uid ?: throw Exception("Nie zalogowano użytkownika")
-        firebaseFirestore.collection("userProfiles").document(uid).set(userProfileMap).await()
+        val uid = firebaseAuth.currentUser?.uid ?: throw Exception(NULL_FIREBASE_USER)
+        firebaseFirestore.collection(COLLECTION_USER_PROFILES)
+            .document(uid).set(userProfileMap).await()
     }
 
-    companion object {
-        const val NULL_FIREBASE_USER = "FirebaseUser is null"
-    }
+
 }
 

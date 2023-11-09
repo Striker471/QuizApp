@@ -15,7 +15,7 @@ class CompleteOneTapSignIn @Inject constructor(
 ) {
 
     operator fun invoke(intent: Intent): Flow<Resource<Unit>> = flow {
-        emit(Resource.Loading())
+        emit(Resource.Loading)
 
         googleAuthRepository.handleOneTapSignInWithIntent(intent)
 

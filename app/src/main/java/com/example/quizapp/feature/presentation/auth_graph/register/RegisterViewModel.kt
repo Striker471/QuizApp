@@ -72,7 +72,7 @@ class RegisterViewModel
                         }
 
                         is Resource.Error -> {
-                            _eventFlow.emit(UiEvent.ShowSnackbar(it.message ?: "Unknown error"))
+                            _eventFlow.emit(UiEvent.ShowSnackbar(it.message))
                             _state.value = _state.value.copy(
                                 isLoading = false
                             )

@@ -15,7 +15,7 @@ class OneTapGoogleSignIn @Inject constructor(
 ) {
 
     operator fun invoke(): Flow<Resource<IntentSender?>> = flow {
-        emit(Resource.Loading())
+        emit(Resource.Loading)
 
         val intentSender = googleAuthRepository.beginOneTapSignIn()
 

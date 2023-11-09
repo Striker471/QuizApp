@@ -44,6 +44,10 @@ object QuizModule {
 
     @Provides
     @Singleton
+    fun provideFirebaseStorage(): FirebaseStorage = FirebaseStorage.getInstance()
+
+    @Provides
+    @Singleton
     fun provideGoogleSignInClient(@ApplicationContext context: Context): SignInClient {
         return Identity.getSignInClient(context)
     }

@@ -18,7 +18,7 @@ class Login @Inject constructor(
 
     operator fun invoke(loginData: LoginData): Flow<Resource<Unit>> = flow {
 
-        emit(Resource.Loading())
+        emit(Resource.Loading)
 
         when (val validationResult = loginValidation(loginData)) {
 

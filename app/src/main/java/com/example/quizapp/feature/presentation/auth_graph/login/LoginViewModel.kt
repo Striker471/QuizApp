@@ -103,7 +103,7 @@ class LoginViewModel
                 loginUseCases.completeOneTapSignIn(event.intent).onEach {
                     when (it) {
                         is Resource.Error -> {
-                            _eventFlow.emit(UiEvent.ShowSnackbar(it.message ?: "Unknown error"))
+                            _eventFlow.emit(UiEvent.ShowSnackbar(it.message))
                         }
 
                         is Resource.Loading -> {
@@ -122,7 +122,7 @@ class LoginViewModel
                 loginUseCases.completeGoogleSignIn(event.intent).onEach {
                     when (it) {
                         is Resource.Error -> {
-                            _eventFlow.emit(UiEvent.ShowSnackbar(it.message ?: "Unknown error"))
+                            _eventFlow.emit(UiEvent.ShowSnackbar(it.message))
                         }
 
                         is Resource.Loading -> {

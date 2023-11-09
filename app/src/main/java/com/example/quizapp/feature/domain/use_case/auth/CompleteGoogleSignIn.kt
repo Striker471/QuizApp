@@ -15,7 +15,7 @@ class CompleteGoogleSignIn @Inject constructor(
 ) {
 
     operator fun invoke(intent: Intent): Flow<Resource<Unit>> = flow {
-        emit(Resource.Loading())
+        emit(Resource.Loading)
 
         googleAuthRepository.signInWithGoogleAccount(intent)
 
