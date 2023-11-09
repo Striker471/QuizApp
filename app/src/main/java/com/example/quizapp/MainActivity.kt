@@ -8,10 +8,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.quizapp.feature.presentation.auth_graph.login.LoginScreen
 import com.example.quizapp.feature.presentation.auth_graph.register.RegisterScreen
 import com.example.quizapp.feature.presentation.auth_graph.reset_password.ResetPasswordScreen
@@ -75,10 +77,21 @@ class MainActivity : ComponentActivity() {
                             composable(Screen.MyQuizzesScreen.route) {
                                 MyQuizzesScreen(navController = navController)
                             }
-                            composable(Screen.CreateQuizScreen.route){
+                            composable(Screen.CreateQuizScreen.route) {
                                 CreateQuizScreen(navController = navController)
                             }
-                            composable(Screen.CreateQuestionScreen.route){
+                            composable(
+                                route = Screen.CreateQuestionScreen.route +
+                                        "?quizId={quizId}",
+                                arguments = listOf(
+                                    navArgument(
+                                        name = "quizId"
+                                    ){
+                                        type = NavType.StringType
+                                        defaultValue = ""
+                                    }
+                                )
+                            ) {
                                 CreateQuestionScreen(navController = navController)
                             }
                         }

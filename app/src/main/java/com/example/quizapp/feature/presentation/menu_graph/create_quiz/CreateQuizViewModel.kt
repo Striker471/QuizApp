@@ -74,6 +74,6 @@ class CreateQuizViewModel @Inject constructor(
 
     sealed class UiEvent() {
         data class ShowSnackbar(val message: String) : UiEvent()
-        data class CreateQuestionNavigate(val uid: String) : UiEvent()
+        data class CreateQuestionNavigate(val quizId: String) : UiEvent()
     }
 }

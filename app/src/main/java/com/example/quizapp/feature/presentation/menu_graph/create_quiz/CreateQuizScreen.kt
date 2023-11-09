@@ -34,6 +34,7 @@ import com.example.quizapp.R
 import com.example.quizapp.feature.presentation.components.AddImageCard
 import com.example.quizapp.feature.presentation.components.CenterTopAppBar
 import com.example.quizapp.feature.presentation.components.MainActionButton
+import com.example.quizapp.feature.presentation.util.Screen
 import kotlinx.coroutines.flow.collectLatest
 
 
@@ -70,11 +71,16 @@ fun CreateQuizScreen(
                 }
             })
 
-    LaunchedEffect(true){
+    LaunchedEffect(true) {
         viewModel.eventFlow.collectLatest {
-            when(it){
+            when (it) {
                 is CreateQuizViewModel.UiEvent.CreateQuestionNavigate -> {
+                    navController.navigate(
+                        Screen.CreateQuestionScreen.route +
+                                "?quizId=$it"
+                    )
                 }
+
                 is CreateQuizViewModel.UiEvent.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(it.message)
                 }
