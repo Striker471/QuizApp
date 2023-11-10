@@ -63,7 +63,33 @@ fun CreateQuestionScreen(
     var showDialog by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableStateOf(-1) }
     if (showDialog) {
-        AddAnswerDialog(onDismissRequest = { showDialog = false })
+//        AddAnswerDialog(
+//            onDismissRequest = {
+//                showDialog = false
+//            }
+//        )
+        AddAnswerDialog(
+            text = state.answers[selectedIndex],
+            onValueChange = {
+                viewModel.onEvent(
+                    CreateQuestionEvent.AddAnswer(
+                        index = selectedIndex,
+                        value = it
+                    )
+                )
+            },
+            checkedSwitch = selectedIndex == state.correctAnswerIndex,
+            onDismissRequest = {
+                showDialog = false
+            },
+            onCheckedChange = {
+                viewModel.onEvent(
+                    CreateQuestionEvent.CheckCorrectAnswer(
+                        selectedIndex
+                    )
+                )
+            }
+        )
     }
 
     val cropImageLauncher = rememberLauncherForActivityResult(CropImageContract()) { result ->
@@ -127,13 +153,13 @@ fun CreateQuestionScreen(
                 count = questionsState.amountQuestions,
                 selectedItem = questionsState.currentQuestion,
                 onItemSelected = { viewModel.onEvent(CreateQuestionEvent.SelectedQuestion(it)) },
-                onAddClicked = { viewModel.onEvent(CreateQuestionEvent.OnAddedQuestion) },
                 lazyListState = lazyListState
             )
             Spacer(modifier = Modifier.height(4.dp))
             Column(
                 modifier = Modifier
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(4.dp))
                 if (state.image != null) {
@@ -141,7 +167,7 @@ fun CreateQuestionScreen(
                         model = state.image,
                         contentDescription = null,
                         modifier = Modifier
-                            .size(320.dp, 240.dp)
+                            .size(240.dp, 180.dp)
                             .clickable {
                                 singlePhotoPickerLauncher.launch(
                                     PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
@@ -158,7 +184,7 @@ fun CreateQuestionScreen(
                         )
                     })
                 }
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 Column(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -170,13 +196,12 @@ fun CreateQuestionScreen(
                         options = listTime,
                     )
                 }
-                Spacer(modifier = Modifier.height(8.dp))
                 LabelWithTextField(
                     title = stringResource(R.string.add_question),
                     value = state.addQuestion,
                     onValueChange = { viewModel.onEvent(CreateQuestionEvent.EnteredAddQuestion(it)) },
                     placeHolder = stringResource(R.string.enter_your_question),
-                    modifier = Modifier.height(74.dp)
+                    modifier = Modifier.height(62.dp)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -193,12 +218,20 @@ fun CreateQuestionScreen(
                     }
                 }
                 Spacer(modifier = Modifier.weight(1f))
-                MainActionButton(
-                    onClick = { },
-                    text = stringResource(R.string.add_question),
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(16.dp))
+                if (questionsState.amountQuestions == questionsState.currentQuestion) {
+                    MainActionButton(
+                        onClick = { viewModel.onEvent(CreateQuestionEvent.OnAddedQuestion) },
+                        text = stringResource(R.string.add_question),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                } else {
+                    MainActionButton(
+                        onClick = { },
+                        text = stringResource(R.string.update_question),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }

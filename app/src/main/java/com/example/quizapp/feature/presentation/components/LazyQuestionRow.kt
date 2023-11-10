@@ -25,7 +25,6 @@ fun LazyQuestionRow(
     count: Int,
     selectedItem: Int,
     onItemSelected: (Int) -> Unit,
-    onAddClicked: () -> Unit,
     lazyListState: LazyListState
 
 ) {
@@ -62,22 +61,22 @@ fun LazyQuestionRow(
                 }
             }
         }
-        item {
-            Box(
-                modifier = Modifier
-                    .clickable {
-//                        count++
-//                        coroutineScope.launch {
-//                            lazyListState.animateScrollToItem(count)
-//                            selectedItem = count
-//                        }
-                        onAddClicked()
-                    }
-                    .size(36.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = null)
-            }
-        }
+//        item {
+//            Box(
+//                modifier = Modifier
+//                    .clickable {
+////                        count++
+////                        coroutineScope.launch {
+////                            lazyListState.animateScrollToItem(count)
+////                            selectedItem = count
+////                        }
+////                        onAddClicked()
+//                    }
+//                    .size(36.dp),
+//                contentAlignment = Alignment.Center
+//            ) {
+//                Icon(imageVector = Icons.Default.Add, contentDescription = null)
+//            }
+//        }
     }
 }

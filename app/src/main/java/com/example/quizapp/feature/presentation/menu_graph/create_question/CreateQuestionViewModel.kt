@@ -24,43 +24,66 @@ class CreateQuestionViewModel @Inject constructor(
                 _currentQuestionState.value = _currentQuestionState.value.copy().apply {
                     answers[event.index] = event.value
                 }
-                copyQuestionToList()
             }
 
             is CreateQuestionEvent.AddImage -> {
                 _currentQuestionState.value = _currentQuestionState.value.copy(
                     image = event.uri
                 )
-                copyQuestionToList()
             }
+
             is CreateQuestionEvent.CheckCorrectAnswer -> {
-                _currentQuestionState.value = _currentQuestionState.value.copy(
-                    correctAnswerIndex = event.index
-                )
-                copyQuestionToList()
+                if (_currentQuestionState.value.correctAnswerIndex == event.index) {
+                    _currentQuestionState.value = _currentQuestionState.value.copy(
+                        correctAnswerIndex = -1
+                    )
+                } else {
+                    _currentQuestionState.value = _currentQuestionState.value.copy(
+                        correctAnswerIndex = event.index
+                    )
+                }
             }
+
             is CreateQuestionEvent.CheckTime -> {
                 _currentQuestionState.value = _currentQuestionState.value.copy(
                     selectedTime = event.time
                 )
-                copyQuestionToList()
             }
+
             is CreateQuestionEvent.EnteredAddQuestion -> {
                 _currentQuestionState.value = _currentQuestionState.value.copy(
                     addQuestion = event.value
                 )
-                copyQuestionToList()
             }
+
             is CreateQuestionEvent.SelectedQuestion -> {
+                if (_questionListState.value.isLastQuestion()) {
+                    copyLastQuestionToList()
+                }
                 _currentQuestionState.value = _questionListState.value
-                    .createQuestionStateList[event.index].copy()
+                    .createQuestionStateList[event.index - 1].copy()
                 _questionListState.value = _questionListState.value
                     .copy(currentQuestion = event.index)
             }
+
+            CreateQuestionEvent.OnAddedQuestion -> {
+                //repository
+                copyLastQuestionToList()
+
+                _questionListState.value.createQuestionStateList.add(CreateQuestionItem())
+
+                _currentQuestionState.value = CreateQuestionItem()
+                _questionListState.value = _questionListState.value.copy(
+                    currentQuestion = _questionListState.value.currentQuestion + 1,
+                    amountQuestions = _questionListState.value.amountQuestions + 1
+                )
+            }
         }
     }
-    private fun copyQuestionToList (){
+
+    private fun copyLastQuestionToList() {
         _questionListState.value.createQuestionStateList[_questionListState
-            .value.currentQuestion] = _currentQuestionState.value.copy()
+            .value.createQuestionStateList.lastIndex] =
+            _currentQuestionState.value
     }
 }

@@ -26,7 +26,7 @@ fun AddImageCard(
     ElevatedCard(
         onClick = onClick,
         modifier = Modifier
-            .height(182.dp)
+            .height(180.dp)
             .fillMaxWidth(),
         colors = CardDefaults.elevatedCardColors(
             containerColor = colorResource(R.color.image_card)

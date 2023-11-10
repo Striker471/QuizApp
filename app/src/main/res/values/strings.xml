@@ -42,6 +42,7 @@
     <string name="my_quizzes">My Quizzes</string>
     <string name="views">Views</string>
     <string name="enter_your_question">Enter your question</string>
+    <string name="update_question">Update question</string>
 
 
 </resources>
