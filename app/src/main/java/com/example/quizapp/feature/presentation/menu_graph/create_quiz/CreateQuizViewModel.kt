@@ -45,7 +45,7 @@ class CreateQuizViewModel @Inject constructor(
                 _state.value = _state.value.copy(description = event.value)
             }
 
-            CreateQuizScreenEvent.CreateQuizOnClick -> {
+            is CreateQuizScreenEvent.CreateQuizOnClick -> {
 
                 createQuiz(
                     CreateQuizData(

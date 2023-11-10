@@ -17,12 +17,11 @@ class CreateQuizValidation @Inject constructor() {
         return ValidationResult.Success
     }
 
-    private fun isTooShort(text: String, minLength: Int): Boolean {
-        return text.filterNot { it.isWhitespace() }.length < minLength
-    }
-
     companion object {
         const val TOO_SHORT_TITLE = "TITLE MUST HAVE AT LEAST 3 CHARACTERS"
         const val TOO_SHORT_DESCRIPTION = "DESCRIPTION MUST HAVE AT LEAST 6 CHARACTERS"
     }
+}
+ fun isTooShort(text: String, minLength: Int): Boolean {
+    return text.filterNot { it.isWhitespace() }.length < minLength
 }

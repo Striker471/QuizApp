@@ -8,11 +8,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -20,12 +17,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -46,7 +40,6 @@ import com.example.quizapp.feature.presentation.components.LabelWithTextField
 import com.example.quizapp.feature.presentation.components.LazyQuestionRow
 import com.example.quizapp.feature.presentation.components.MainActionButton
 import com.example.quizapp.feature.presentation.components.SelectableTimerCard
-import kotlinx.coroutines.launch
 
 
 @Composable
@@ -198,8 +191,8 @@ fun CreateQuestionScreen(
                 }
                 LabelWithTextField(
                     title = stringResource(R.string.add_question),
-                    value = state.addQuestion,
-                    onValueChange = { viewModel.onEvent(CreateQuestionEvent.EnteredAddQuestion(it)) },
+                    value = state.questionDescription,
+                    onValueChange = { viewModel.onEvent(CreateQuestionEvent.EnteredQuestionDescription(it)) },
                     placeHolder = stringResource(R.string.enter_your_question),
                     modifier = Modifier.height(62.dp)
                 )
@@ -209,7 +202,8 @@ fun CreateQuestionScreen(
                     for (i in 0..3) {
                         AddStraightAnswerCard(
                             index = i,
-                            correctAnswer = i == state.correctAnswerIndex
+                            correctAnswer = i == state.correctAnswerIndex,
+                            text = state.answers[i]
                         ) {
                             selectedIndex = it
                             showDialog = true

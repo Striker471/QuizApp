@@ -2,11 +2,12 @@ package com.example.quizapp.feature.presentation.menu_graph.create_question
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import javax.inject.Inject
 
 class CreateQuestionViewModel @Inject constructor(
-
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     // Stan dla calej listy pytan
@@ -17,6 +18,13 @@ class CreateQuestionViewModel @Inject constructor(
     private val _currentQuestionState = mutableStateOf(CreateQuestionItem())
     val currentQuestionState: State<CreateQuestionItem> = _currentQuestionState
 
+    private var quizId : String = ""
+
+    init{
+        savedStateHandle.get<String>("quizId")?.let {
+            quizId = it
+        }
+    }
 
     fun onEvent(event: CreateQuestionEvent) {
         when (event) {
@@ -50,9 +58,9 @@ class CreateQuestionViewModel @Inject constructor(
                 )
             }
 
-            is CreateQuestionEvent.EnteredAddQuestion -> {
+            is CreateQuestionEvent.EnteredQuestionDescription -> {
                 _currentQuestionState.value = _currentQuestionState.value.copy(
-                    addQuestion = event.value
+                    questionDescription = event.value
                 )
             }
 
@@ -61,7 +69,7 @@ class CreateQuestionViewModel @Inject constructor(
                     copyLastQuestionToList()
                 }
                 _currentQuestionState.value = _questionListState.value
-                    .createQuestionStateList[event.index - 1].copy()
+                    .createQuestionStateList[event.index - 1].copyWithNewAnswers()
                 _questionListState.value = _questionListState.value
                     .copy(currentQuestion = event.index)
             }
@@ -69,14 +77,20 @@ class CreateQuestionViewModel @Inject constructor(
             CreateQuestionEvent.OnAddedQuestion -> {
                 //repository
                 copyLastQuestionToList()
+//trza zaktualizowac     val questionId: String? = null
+                val createQuestionItem = CreateQuestionItem()
+                _questionListState.value.createQuestionStateList.add(createQuestionItem)
 
-                _questionListState.value.createQuestionStateList.add(CreateQuestionItem())
-
-                _currentQuestionState.value = CreateQuestionItem()
+                _currentQuestionState.value = createQuestionItem
                 _questionListState.value = _questionListState.value.copy(
                     currentQuestion = _questionListState.value.currentQuestion + 1,
                     amountQuestions = _questionListState.value.amountQuestions + 1
                 )
+            }
+
+            is CreateQuestionEvent.OnUpdateQuestion -> {
+
+
             }
         }
     }

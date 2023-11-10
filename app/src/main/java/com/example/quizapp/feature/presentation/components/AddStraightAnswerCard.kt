@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.quizapp.R
@@ -31,6 +33,7 @@ import com.example.quizapp.R
 fun AddStraightAnswerCard(
     index: Int,
     correctAnswer: Boolean,
+    text: String = "",
     onClick: (Int) -> Unit
 ) {
     ElevatedCard(
@@ -49,12 +52,21 @@ fun AddStraightAnswerCard(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxSize()
+                .padding(horizontal = 4.dp)
         ) {
-            Text(
-                text = stringResource(R.string.add_answear),
-                style = MaterialTheme.typography.bodyMedium,
-            )
+            if (text.isBlank()) {
+                Text(
+                    text = stringResource(R.string.add_answear),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            } else {
+                Text(
+                    text = text,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
 
+                )
+            }
         }
     }
 }
