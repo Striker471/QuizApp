@@ -77,7 +77,7 @@ fun CreateQuizScreen(
                 is CreateQuizViewModel.UiEvent.CreateQuestionNavigate -> {
                     navController.navigate(
                         Screen.CreateQuestionScreen.route +
-                                "?quizId=$it"
+                                "?quizId=${it.quizId}"
                     )
                 }
 

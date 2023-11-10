@@ -40,6 +40,9 @@ import com.example.quizapp.feature.presentation.components.LabelWithTextField
 import com.example.quizapp.feature.presentation.components.LazyQuestionRow
 import com.example.quizapp.feature.presentation.components.MainActionButton
 import com.example.quizapp.feature.presentation.components.SelectableTimerCard
+import com.example.quizapp.feature.presentation.menu_graph.create_quiz.CreateQuizViewModel
+import com.example.quizapp.feature.presentation.util.Screen
+import kotlinx.coroutines.flow.collectLatest
 
 
 @Composable
@@ -108,6 +111,17 @@ fun CreateQuestionScreen(
                     )
                 }
             })
+
+    LaunchedEffect(true) {
+        viewModel.eventFlow.collectLatest {
+            when (it) {
+                is CreateQuestionViewModel.UiEvent.ShowSnackbar -> {
+                    snackbarHostState.showSnackbar(it.message)
+                }
+            }
+        }
+    }
+
 
     Scaffold(
         topBar = {
@@ -192,7 +206,13 @@ fun CreateQuestionScreen(
                 LabelWithTextField(
                     title = stringResource(R.string.add_question),
                     value = state.questionDescription,
-                    onValueChange = { viewModel.onEvent(CreateQuestionEvent.EnteredQuestionDescription(it)) },
+                    onValueChange = {
+                        viewModel.onEvent(
+                            CreateQuestionEvent.EnteredQuestionDescription(
+                                it
+                            )
+                        )
+                    },
                     placeHolder = stringResource(R.string.enter_your_question),
                     modifier = Modifier.height(62.dp)
                 )
@@ -220,7 +240,7 @@ fun CreateQuestionScreen(
                     )
                 } else {
                     MainActionButton(
-                        onClick = { },
+                        onClick = { viewModel.onEvent(CreateQuestionEvent.OnUpdateQuestion) },
                         text = stringResource(R.string.update_question),
                         modifier = Modifier.fillMaxWidth()
                     )

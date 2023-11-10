@@ -39,65 +39,64 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = colorResource(R.color.surface)) {
-//                    NavHost(
-//                        navController = navController,
-//                        startDestination = NestedGraph.AuthGraph.route
-//                    ) {
-//                        navigation(
-//                            startDestination = NestedGraph.AuthGraph.startDestination,
-//                            route = NestedGraph.AuthGraph.route
-//                        ) {
-//                            composable(Screen.StartScreen.route) {
-//                                StartScreen(navController = navController)
-//                            }
-//                            composable(Screen.LoginScreen.route) {
-//                                LoginScreen(navController = navController)
-//                            }
-//                            composable(Screen.RegisterScreen.route) {
-//                                RegisterScreen(navController = navController)
-//                            }
-//                            composable(Screen.ResetPasswordScreen.route) {
-//                                ResetPasswordScreen(navController = navController)
-//                            }
-//                        }
-//                        navigation(
-//                            startDestination = NestedGraph.MenuGraph.startDestination,
-//                            route = NestedGraph.MenuGraph.route
-//                        ) {
-//
-//                            composable(Screen.MenuScreen.route) {
-//                                MenuScreen(navController = navController)
-//                            }
-//                            composable(Screen.ProfileScreen.route) {
-//                                ProfileScreen(navController = navController)
-//                            }
-//                            composable(Screen.LibraryScreen.route) {
-//                                LibraryScreen(navController = navController)
-//                            }
-//                            composable(Screen.MyQuizzesScreen.route) {
-//                                MyQuizzesScreen(navController = navController)
-//                            }
-//                            composable(Screen.CreateQuizScreen.route) {
-//                                CreateQuizScreen(navController = navController)
-//                            }
-//                            composable(
-//                                route = Screen.CreateQuestionScreen.route +
-//                                        "?quizId={quizId}",
-//                                arguments = listOf(
-//                                    navArgument(
-//                                        name = "quizId"
-//                                    ){
-//                                        type = NavType.StringType
-//                                        defaultValue = ""
-//                                    }
-//                                )
-//                            ) {
-////                                CreateQuestionScreen(navController = navController)
-//                            }
-//                        }
-//                    }
+                    NavHost(
+                        navController = navController,
+                        startDestination = NestedGraph.AuthGraph.route
+                    ) {
+                        navigation(
+                            startDestination = NestedGraph.AuthGraph.startDestination,
+                            route = NestedGraph.AuthGraph.route
+                        ) {
+                            composable(Screen.StartScreen.route) {
+                                StartScreen(navController = navController)
+                            }
+                            composable(Screen.LoginScreen.route) {
+                                LoginScreen(navController = navController)
+                            }
+                            composable(Screen.RegisterScreen.route) {
+                                RegisterScreen(navController = navController)
+                            }
+                            composable(Screen.ResetPasswordScreen.route) {
+                                ResetPasswordScreen(navController = navController)
+                            }
+                        }
+                        navigation(
+                            startDestination = NestedGraph.MenuGraph.startDestination,
+                            route = NestedGraph.MenuGraph.route
+                        ) {
 
-                    CreateQuestionScreen(navController = navController)
+                            composable(Screen.MenuScreen.route) {
+                                MenuScreen(navController = navController)
+                            }
+                            composable(Screen.ProfileScreen.route) {
+                                ProfileScreen(navController = navController)
+                            }
+                            composable(Screen.LibraryScreen.route) {
+                                LibraryScreen(navController = navController)
+                            }
+                            composable(Screen.MyQuizzesScreen.route) {
+                                MyQuizzesScreen(navController = navController)
+                            }
+                            composable(Screen.CreateQuizScreen.route) {
+                                CreateQuizScreen(navController = navController)
+                            }
+                            composable(
+                                route = Screen.CreateQuestionScreen.route +
+                                        "?quizId={quizId}",
+                                arguments = listOf(
+                                    navArgument(
+                                        name = "quizId"
+                                    ){
+                                        type = NavType.StringType
+                                        defaultValue = ""
+                                    }
+                                )
+                            ) {
+                                CreateQuestionScreen(navController = navController)
+                            }
+                        }
+                    }
+
                 }
             }
         }
