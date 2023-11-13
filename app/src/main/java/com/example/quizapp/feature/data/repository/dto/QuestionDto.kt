@@ -1,7 +1,7 @@
-package com.example.quizapp.feature.domain.model
+package com.example.quizapp.feature.data.repository.dto
 
 
-data class CreateQuestionDto(
+data class QuestionDto(
     val imageUrl: String? = null,
     val questionDescription: String = "",
     val answers: List<String> = emptyList(),

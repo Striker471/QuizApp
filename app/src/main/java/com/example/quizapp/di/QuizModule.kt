@@ -2,6 +2,8 @@ package com.example.quizapp.di
 
 import android.content.Context
 import com.example.quizapp.R
+import com.example.quizapp.feature.data.repository.impl.RepositoryImpl
+import com.example.quizapp.feature.domain.repository.Repository
 import com.example.quizapp.feature.domain.util.error.ExceptionHandler
 import com.example.quizapp.feature.domain.util.error.createDefaultHandler
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
@@ -28,6 +30,16 @@ object QuizModule {
     @Singleton
     fun provideContext(@ApplicationContext appContext: Context): Context {
         return appContext
+    }
+
+    @Provides
+    @Singleton
+    fun provideRepository(
+        firebaseAuth: FirebaseAuth,
+        firebaseFirestore: FirebaseFirestore,
+        firebaseStorage: FirebaseStorage
+    ): Repository {
+        return RepositoryImpl(firebaseAuth, firebaseFirestore, firebaseStorage)
     }
 
     @Provides

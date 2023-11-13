@@ -1,6 +1,6 @@
 package com.example.quizapp.feature.domain.use_case.auth
 
-import com.example.quizapp.feature.data.repository.AuthRepository
+import com.example.quizapp.feature.data.repository.impl.AuthRepository
 import javax.inject.Inject
 
 class IsUserSignedIn @Inject constructor(

@@ -2,7 +2,7 @@ package com.example.quizapp.feature.domain.use_case.auth
 
 import com.example.quizapp.feature.domain.util.Resource
 import com.example.quizapp.feature.domain.util.error.ExceptionHandler
-import com.example.quizapp.feature.data.repository.AuthRepository
+import com.example.quizapp.feature.data.repository.impl.AuthRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow

@@ -1,7 +1,7 @@
 package com.example.quizapp.feature.presentation.menu_graph.menu
 
 import androidx.lifecycle.ViewModel
-import com.example.quizapp.feature.data.repository.AuthRepository
+import com.example.quizapp.feature.data.repository.impl.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -11,8 +11,14 @@ class MenuViewModel @Inject constructor(
 ) : ViewModel() {
 
 
+    init{
+
+    }
+
     fun logOut (){
         authRepository.logOut()
     }
+
+
 
 }

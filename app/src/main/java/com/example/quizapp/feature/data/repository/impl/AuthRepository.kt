@@ -1,4 +1,4 @@
-package com.example.quizapp.feature.data.repository
+package com.example.quizapp.feature.data.repository.impl
 
 import com.example.quizapp.feature.data.repository.Constants.COLLECTION_USER_PROFILES
 import com.example.quizapp.feature.data.repository.Constants.NULL_FIREBASE_USER

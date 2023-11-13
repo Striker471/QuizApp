@@ -1,30 +1,33 @@
-package com.example.quizapp.feature.data.repository
+package com.example.quizapp.feature.data.repository.impl
 
+import com.example.quizapp.feature.data.repository.Constants
 import com.example.quizapp.feature.data.repository.Constants.COLLECTION_QUESTIONS
 import com.example.quizapp.feature.data.repository.Constants.COLLECTION_QUIZZES
-import com.example.quizapp.feature.domain.model.CreateQuestionDto
+import com.example.quizapp.feature.data.repository.dto.QuestionDto
 import com.example.quizapp.feature.domain.model.CreateQuestionToRepositoryData
 import com.example.quizapp.feature.domain.model.CreateQuizData
 import com.example.quizapp.feature.domain.model.QuestionReturnData
 import com.example.quizapp.feature.domain.model.QuestionUpdateToRepositoryData
-import com.example.quizapp.feature.domain.model.QuizDto
+import com.example.quizapp.feature.data.repository.dto.QuizDto
+import com.example.quizapp.feature.domain.repository.Repository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class Repository @Inject constructor(
+class RepositoryImpl (
     private val firebaseAuth: FirebaseAuth,
     private val firebaseFirestore: FirebaseFirestore,
     private val firebaseStorage: FirebaseStorage
+) : Repository {
 
-) {
-
-    suspend fun createQuiz(createQuizData: CreateQuizData): String {
+    override suspend fun createQuiz(createQuizData: CreateQuizData): String {
         val authorId =
             firebaseAuth.currentUser?.uid ?: throw Exception(Constants.NULL_FIREBASE_USER)
+        firebaseAuth.currentUser?.displayName
 
         val quizId = firebaseFirestore.collection(COLLECTION_QUIZZES).document().id
 
@@ -36,22 +39,24 @@ class Repository @Inject constructor(
             imageSnapshot.storage.downloadUrl.await().toString()
         } else null
 
-        val newQuizData = QuizDto(
-            authorId = authorId,
-            title = createQuizData.title,
-            description = createQuizData.description,
-            imageUrl = downloadUrl,
-            questionCount = 0,
-            createdAt = FieldValue.serverTimestamp(),
-            views = 0,
-            quizId = quizId
+        val userName = firebaseAuth.currentUser?.displayName ?: ""
+
+        val newQuizData = hashMapOf(
+            "authorId" to authorId,
+            "title" to createQuizData.title,
+            "description" to createQuizData.description,
+            "imageUrl" to downloadUrl,
+            "questionCount" to 0,
+            "createdAt" to FieldValue.serverTimestamp(),
+            "views" to 0,
+            "quizId" to quizId,
+            "userName" to userName
         )
         firebaseFirestore.collection(COLLECTION_QUIZZES).document(quizId).set(newQuizData).await()
 
         return quizId
     }
-
-    suspend fun addQuestion(
+    override suspend fun addQuestion(
         createQuestionToRepositoryData: CreateQuestionToRepositoryData,
         quizId: String
     ): QuestionReturnData {
@@ -64,7 +69,7 @@ class Repository @Inject constructor(
         val downloadUrl: String? = if (createQuestionToRepositoryData.image != null) {
             val imageReference = firebaseStorage.reference
                 .child(
-                    "images/$quizId${
+                    "images/$questionID${
                         createQuestionToRepositoryData
                             .image.lastPathSegment
                     }"
@@ -73,7 +78,7 @@ class Repository @Inject constructor(
             imageSnapshot.storage.downloadUrl.await().toString()
         } else null
 
-        val createQuestionData = CreateQuestionDto(
+        val createQuestionData = QuestionDto(
             imageUrl = downloadUrl,
             questionDescription = createQuestionToRepositoryData.questionDescription,
             answers = createQuestionToRepositoryData.answers,
@@ -89,7 +94,7 @@ class Repository @Inject constructor(
         )
     }
 
-    suspend fun updateQuestion(
+    override suspend fun updateQuestion(
         questionData: QuestionUpdateToRepositoryData,
         quizId: String,
         questionId: String
@@ -100,7 +105,7 @@ class Repository @Inject constructor(
         val questionRef = firebaseFirestore.collection(COLLECTION_QUIZZES).document(quizId)
             .collection(COLLECTION_QUESTIONS).document(questionId)
 
-        val currentData = questionRef.get().await().toObject(CreateQuestionDto::class.java)
+        val currentData = questionRef.get().await().toObject(QuestionDto::class.java)
 
         val downloadUrl: String? = if (questionData.image != null) {
             val imageReference = firebaseStorage.reference
@@ -143,14 +148,14 @@ class Repository @Inject constructor(
         return downloadUrl
     }
 
-    suspend fun deleteQuestion(quizId: String, questionId: String) {
+    override suspend fun deleteQuestion(quizId: String, questionId: String) {
 
 
         val questionDocRef = firebaseFirestore.collection(COLLECTION_QUIZZES)
             .document(quizId).collection(COLLECTION_QUESTIONS).document(questionId)
 
         val documentSnapshot = questionDocRef.get().await()
-        val question = documentSnapshot.toObject(CreateQuestionDto::class.java)
+        val question = documentSnapshot.toObject(QuestionDto::class.java)
         val resourceUrl = question?.imageUrl
 
         questionDocRef.delete().await()
@@ -159,6 +164,25 @@ class Repository @Inject constructor(
             val storageRef = firebaseStorage.getReferenceFromUrl(it)
             storageRef.delete().await()
         }
+    }
+
+    override suspend fun getTheLatestQuizzes(): List<QuizDto> {
+
+        val documentSnapshot = firebaseFirestore.collection(COLLECTION_QUIZZES)
+            .orderBy("createdAt", Query.Direction.DESCENDING)
+            .limit(10)
+            .get().await()
+
+        return documentSnapshot.toObjects(QuizDto::class.java)
+    }
+
+    override suspend fun getMostViewedQuizzes() : List<QuizDto>{
+        val documentSnapshot = firebaseFirestore.collection(COLLECTION_QUIZZES)
+            .orderBy("views", Query.Direction.ASCENDING)
+            .limit(10)
+            .get().await()
+
+        return documentSnapshot.toObjects(QuizDto::class.java)
     }
 
 //

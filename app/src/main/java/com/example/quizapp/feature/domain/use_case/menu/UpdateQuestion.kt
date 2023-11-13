@@ -1,7 +1,8 @@
 package com.example.quizapp.feature.domain.use_case.menu
 
-import com.example.quizapp.feature.data.repository.Repository
+import com.example.quizapp.feature.data.repository.impl.RepositoryImpl
 import com.example.quizapp.feature.domain.model.QuestionUpdateToRepositoryData
+import com.example.quizapp.feature.domain.repository.Repository
 import com.example.quizapp.feature.domain.use_case.ValidationResult
 import com.example.quizapp.feature.domain.util.Resource
 import com.example.quizapp.feature.domain.util.error.ExceptionHandler

@@ -1,7 +1,7 @@
 package com.example.quizapp.feature.domain.use_case.auth
 
 import android.content.Intent
-import com.example.quizapp.feature.data.repository.GoogleAuthRepository
+import com.example.quizapp.feature.data.repository.impl.GoogleAuthRepository
 import javax.inject.Inject
 
 class BasicGoogleSignIn @Inject constructor(

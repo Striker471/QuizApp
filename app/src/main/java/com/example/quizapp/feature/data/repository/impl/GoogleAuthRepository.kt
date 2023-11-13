@@ -1,9 +1,8 @@
-package com.example.quizapp.feature.data.repository
+package com.example.quizapp.feature.data.repository.impl
 
 import android.content.Intent
 import android.content.IntentSender
 import com.example.quizapp.feature.data.repository.Constants.COLLECTION_USER_PROFILES
-import com.example.quizapp.feature.data.repository.Constants.NULL_EMAIL_FROM_GOOGLE
 import com.example.quizapp.feature.data.repository.Constants.NULL_FIREBASE_USER
 import com.example.quizapp.feature.data.repository.Constants.NULL_USERNAME_FROM_GOOGLE
 import com.google.android.gms.auth.api.identity.BeginSignInRequest

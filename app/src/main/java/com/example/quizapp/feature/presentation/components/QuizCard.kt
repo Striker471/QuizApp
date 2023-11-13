@@ -15,16 +15,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.quizapp.R
 
 @Composable
 fun QuizCard(
-    title: String = "Quiz losowy ",
+    title: String = "Quiz losowy",
     profileUrl: String = "",
-    quizUrl: String = "",
+    imageUrl: String? = null,
     userName: String = "Agnieszka Mrozinska-Skarie",
 
-) {
+    ) {
 
     Card(
         modifier = Modifier
@@ -39,12 +40,20 @@ fun QuizCard(
                     .weight(6.2f)
                     .fillMaxWidth()
             ) {
-                Image(
-                    painter = painterResource(R.drawable.image_dog),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.FillBounds
-                )
+                if (imageUrl != null) {
+                    AsyncImage(
+                        model = imageUrl ,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.FillBounds
+                    )
+                } else
+                    Image(
+                        painter = painterResource(R.drawable.image_dog),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.FillBounds
+                    )
             }
             Box(
                 modifier = Modifier
@@ -68,28 +77,18 @@ fun QuizCard(
                         overflow = TextOverflow.Ellipsis
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    Row(
+                    Text(
+                        text = userName,
                         modifier = Modifier
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Image(
-                            painterResource(R.drawable.avatar_1),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(24.dp)
-                        )
-                        Spacer(modifier = Modifier.width(2.dp))
-                        Text(
-                            text = userName,
-                            style = MaterialTheme.typography.bodySmall,
-                            fontSize = 10.sp,
-                            lineHeight = 15.sp,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
+                            .fillMaxWidth()
+                            .padding(horizontal = 4.dp)
+                            .wrapContentWidth(Alignment.CenterHorizontally),
+                        style = MaterialTheme.typography.bodySmall,
+                        fontSize = 10.sp,
+                        lineHeight = 15.sp,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
                     Spacer(modifier = Modifier.height(2.dp))
                 }
             }
