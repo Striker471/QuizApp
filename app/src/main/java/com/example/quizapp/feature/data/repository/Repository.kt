@@ -2,12 +2,12 @@ package com.example.quizapp.feature.data.repository
 
 import com.example.quizapp.feature.data.repository.Constants.COLLECTION_QUESTIONS
 import com.example.quizapp.feature.data.repository.Constants.COLLECTION_QUIZZES
-import com.example.quizapp.feature.domain.model.CreateQuestionData
+import com.example.quizapp.feature.domain.model.CreateQuestionDto
 import com.example.quizapp.feature.domain.model.CreateQuestionToRepositoryData
 import com.example.quizapp.feature.domain.model.CreateQuizData
 import com.example.quizapp.feature.domain.model.QuestionReturnData
 import com.example.quizapp.feature.domain.model.QuestionUpdateToRepositoryData
-import com.example.quizapp.feature.domain.model.QuizData
+import com.example.quizapp.feature.domain.model.QuizDto
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -36,7 +36,7 @@ class Repository @Inject constructor(
             imageSnapshot.storage.downloadUrl.await().toString()
         } else null
 
-        val newQuizData = QuizData(
+        val newQuizData = QuizDto(
             authorId = authorId,
             title = createQuizData.title,
             description = createQuizData.description,
@@ -73,7 +73,7 @@ class Repository @Inject constructor(
             imageSnapshot.storage.downloadUrl.await().toString()
         } else null
 
-        val createQuestionData = CreateQuestionData(
+        val createQuestionData = CreateQuestionDto(
             imageUrl = downloadUrl,
             questionDescription = createQuestionToRepositoryData.questionDescription,
             answers = createQuestionToRepositoryData.answers,
@@ -100,7 +100,7 @@ class Repository @Inject constructor(
         val questionRef = firebaseFirestore.collection(COLLECTION_QUIZZES).document(quizId)
             .collection(COLLECTION_QUESTIONS).document(questionId)
 
-        val currentData = questionRef.get().await().toObject(CreateQuestionData::class.java)
+        val currentData = questionRef.get().await().toObject(CreateQuestionDto::class.java)
 
         val downloadUrl: String? = if (questionData.image != null) {
             val imageReference = firebaseStorage.reference
@@ -134,13 +134,31 @@ class Repository @Inject constructor(
         if (questionData?.selectedTime != null) {
             updates["selectedTime"] = questionData.selectedTime
         }
-        if(downloadUrl != null){
+        if (downloadUrl != null) {
             updates["imageUrl"] = downloadUrl
         }
         if (updates.isNotEmpty()) {
             questionRef.update(updates).await()
         }
         return downloadUrl
+    }
+
+    suspend fun deleteQuestion(quizId: String, questionId: String) {
+
+
+        val questionDocRef = firebaseFirestore.collection(COLLECTION_QUIZZES)
+            .document(quizId).collection(COLLECTION_QUESTIONS).document(questionId)
+
+        val documentSnapshot = questionDocRef.get().await()
+        val question = documentSnapshot.toObject(CreateQuestionDto::class.java)
+        val resourceUrl = question?.imageUrl
+
+        questionDocRef.delete().await()
+
+        resourceUrl?.let {
+            val storageRef = firebaseStorage.getReferenceFromUrl(it)
+            storageRef.delete().await()
+        }
     }
 
 //

@@ -1,9 +1,7 @@
 package com.example.quizapp.feature.domain.model
 
-import android.net.Uri
 
-
-data class CreateQuestionData(
+data class CreateQuestionDto(
     val imageUrl: String? = null,
     val questionDescription: String = "",
     val answers: List<String> = emptyList(),

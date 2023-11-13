@@ -24,9 +24,8 @@ data class CreateQuestionState(
     val createQuestionStateList:
     MutableList<CreateQuestionItem> = mutableStateListOf(CreateQuestionItem()),
     val currentQuestion: Int = 1,
-    val amountQuestions: Int = 1
 ){
     fun isLastQuestion() :Boolean{
-        return currentQuestion == amountQuestions
+        return currentQuestion == createQuestionStateList.size
     }
 }

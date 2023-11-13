@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quizapp.feature.domain.use_case.menu.AddQuestion
+import com.example.quizapp.feature.domain.use_case.menu.DeleteQuestion
 import com.example.quizapp.feature.domain.use_case.menu.UpdateQuestion
 import com.example.quizapp.feature.domain.util.Resource
 import com.example.quizapp.feature.presentation.menu_graph.create_quiz.CreateQuizViewModel
@@ -14,12 +15,15 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 @HiltViewModel
 class CreateQuestionViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val addQuestion: AddQuestion,
-    private val updateQuestion: UpdateQuestion
+    private val updateQuestion: UpdateQuestion,
+    private val deleteQuestion: DeleteQuestion
 ) : ViewModel() {
 
     // Stan dla calej listy pytan
@@ -113,7 +117,6 @@ class CreateQuestionViewModel @Inject constructor(
                             _currentQuestionState.value = createQuestionItem
                             _questionListState.value = _questionListState.value.copy(
                                 currentQuestion = _questionListState.value.currentQuestion + 1,
-                                amountQuestions = _questionListState.value.amountQuestions + 1
                             )
                         }
 
@@ -121,9 +124,7 @@ class CreateQuestionViewModel @Inject constructor(
                             _eventFlow.emit(UiEvent.ShowSnackbar(it.message))
                         }
                     }
-                }.launchIn(
-                    viewModelScope
-                )
+                }.launchIn(viewModelScope)
             }
 
             is CreateQuestionEvent.OnUpdateQuestion -> {
@@ -153,6 +154,44 @@ class CreateQuestionViewModel @Inject constructor(
                     }
                 }.launchIn(viewModelScope)
             }
+
+            is CreateQuestionEvent.DeleteQuestion -> {
+                if (_questionListState.value.isLastQuestion())
+                    viewModelScope.launch {
+                        _eventFlow.emit(
+                            UiEvent.ShowSnackbar(
+                                "You cannot delete not accepted question"
+                            )
+                        )
+                    }
+                else {
+                    val numberDeleteQuestion = _questionListState.value.currentQuestion
+                    deleteQuestion(
+                        quizId,
+                        _currentQuestionState.value.questionId
+                    ).onEach {
+                        when (it) {
+                            is Resource.Error -> {
+                                _eventFlow.emit(UiEvent.ShowSnackbar(it.message))
+                            }
+
+                            is Resource.Loading -> {
+
+                            }
+
+                            is Resource.Success -> {
+                                onDeleteQuestion(numberDeleteQuestion)
+                            }
+                        }
+                    }.launchIn(viewModelScope)
+                }
+            }
+
+            is CreateQuestionEvent.FinishQuiz -> {
+                viewModelScope.launch {
+                    _eventFlow.emit(UiEvent.MyQuizzesNavigate)
+                }
+            }
         }
     }
 
@@ -167,7 +206,19 @@ class CreateQuestionViewModel @Inject constructor(
             _questionListState.value.currentQuestion - 1] = _currentQuestionState.value
     }
 
+    private fun onDeleteQuestion(numberDeleteQuestion: Int) {
+        _questionListState.value.createQuestionStateList.removeAt(numberDeleteQuestion - 1)
+        if (_questionListState.value.currentQuestion != 1)
+            _questionListState.value = _questionListState.value.copy(
+                currentQuestion = numberDeleteQuestion - 1
+            )
+        _currentQuestionState.value = _questionListState.value
+            .createQuestionStateList[_questionListState.value.currentQuestion - 1]
+            .copyWithNewAnswers()
+    }
+
     sealed class UiEvent {
         data class ShowSnackbar(val message: String) : UiEvent()
+        object MyQuizzesNavigate : UiEvent()
     }
 }

@@ -35,5 +35,4 @@ class CreateQuiz @Inject constructor(
             }
         }
     }.catch(exceptionHandler::handle)
-
 }

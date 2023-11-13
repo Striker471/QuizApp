@@ -1,6 +1,6 @@
 package com.example.quizapp.feature.domain.model
 
-data class QuizData(
+data class QuizDto(
     val authorId: String,
     val title: String,
     val description: String,

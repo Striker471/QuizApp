@@ -13,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -40,7 +41,7 @@ import com.example.quizapp.feature.presentation.components.LabelWithTextField
 import com.example.quizapp.feature.presentation.components.LazyQuestionRow
 import com.example.quizapp.feature.presentation.components.MainActionButton
 import com.example.quizapp.feature.presentation.components.SelectableTimerCard
-import com.example.quizapp.feature.presentation.menu_graph.create_quiz.CreateQuizViewModel
+import com.example.quizapp.feature.presentation.menu_graph.create_question.components.TopBarDropdownMenu
 import com.example.quizapp.feature.presentation.util.Screen
 import kotlinx.coroutines.flow.collectLatest
 
@@ -56,9 +57,10 @@ fun CreateQuestionScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val lazyListState = rememberLazyListState()
 
-    var showDialog by remember { mutableStateOf(false) }
+    var showTimeDialog by remember { mutableStateOf(false) }
+    var showTopBarDialog by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableStateOf(-1) }
-    if (showDialog) {
+    if (showTimeDialog) {
 //        AddAnswerDialog(
 //            onDismissRequest = {
 //                showDialog = false
@@ -76,7 +78,7 @@ fun CreateQuestionScreen(
             },
             checkedSwitch = selectedIndex == state.correctAnswerIndex,
             onDismissRequest = {
-                showDialog = false
+                showTimeDialog = false
             },
             onCheckedChange = {
                 viewModel.onEvent(
@@ -118,6 +120,12 @@ fun CreateQuestionScreen(
                 is CreateQuestionViewModel.UiEvent.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(it.message)
                 }
+
+                CreateQuestionViewModel.UiEvent.MyQuizzesNavigate -> {
+                    navController.navigate(Screen.MyQuizzesScreen.route){
+                        popUpTo(Screen.MenuScreen.route)
+                    }
+                }
             }
         }
     }
@@ -134,6 +142,22 @@ fun CreateQuestionScreen(
                         Image(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = null
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = {
+                        showTopBarDialog = true
+                    }) {
+                        Image(
+                            imageVector = Icons.Filled.MoreVert,
+                            contentDescription = null
+                        )
+                        TopBarDropdownMenu(
+                            expanded = showTopBarDialog,
+                            onDismiss = { showTopBarDialog = false },
+                            onDeleteClick = { viewModel.onEvent(CreateQuestionEvent.DeleteQuestion) },
+                            onFinishClick = { viewModel.onEvent(CreateQuestionEvent.FinishQuiz) }
                         )
                     }
                 }
@@ -157,7 +181,7 @@ fun CreateQuestionScreen(
         ) {
             Spacer(modifier = Modifier.height(4.dp))
             LazyQuestionRow(
-                count = questionsState.amountQuestions,
+                count = questionsState.createQuestionStateList.size,
                 selectedItem = questionsState.currentQuestion,
                 onItemSelected = { viewModel.onEvent(CreateQuestionEvent.SelectedQuestion(it)) },
                 lazyListState = lazyListState
@@ -169,9 +193,16 @@ fun CreateQuestionScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(4.dp))
-                if (state.image != null) {
+                if (state.image == null && state.imageUrl == null) {
+                    AddImageCard(onClick = {
+                        singlePhotoPickerLauncher.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
+                    })
+                }else
+                {
                     AsyncImage(
-                        model = state.image,
+                        model = if(state.image != null) state.image else state.imageUrl ,
                         contentDescription = null,
                         modifier = Modifier
                             .size(240.dp, 180.dp)
@@ -184,13 +215,7 @@ fun CreateQuestionScreen(
                         alignment = Alignment.Center
                     )
                 }
-                if (state.image == null) {
-                    AddImageCard(onClick = {
-                        singlePhotoPickerLauncher.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                        )
-                    })
-                }
+
                 Spacer(modifier = Modifier.height(8.dp))
                 Column(
                     modifier = Modifier
@@ -226,13 +251,13 @@ fun CreateQuestionScreen(
                             text = state.answers[i]
                         ) {
                             selectedIndex = it
-                            showDialog = true
+                            showTimeDialog = true
                         }
                         Spacer(modifier = Modifier.height(12.dp))
                     }
                 }
                 Spacer(modifier = Modifier.weight(1f))
-                if (questionsState.amountQuestions == questionsState.currentQuestion) {
+                if (questionsState.createQuestionStateList.size == questionsState.currentQuestion) {
                     MainActionButton(
                         onClick = { viewModel.onEvent(CreateQuestionEvent.OnAddedQuestion) },
                         text = stringResource(R.string.add_question),

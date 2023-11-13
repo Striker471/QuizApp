@@ -78,7 +78,9 @@ fun CreateQuizScreen(
                     navController.navigate(
                         Screen.CreateQuestionScreen.route +
                                 "?quizId=${it.quizId}"
-                    )
+                    ) {
+                        popUpTo(Screen.MenuScreen.route)
+                    }
                 }
 
                 is CreateQuizViewModel.UiEvent.ShowSnackbar -> {

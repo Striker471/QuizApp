@@ -11,4 +11,6 @@ sealed class CreateQuestionEvent {
     data class SelectedQuestion(val index: Int) : CreateQuestionEvent()
     object OnAddedQuestion : CreateQuestionEvent()
     object OnUpdateQuestion: CreateQuestionEvent()
+    object FinishQuiz : CreateQuestionEvent()
+    object DeleteQuestion :CreateQuestionEvent()
 }
