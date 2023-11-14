@@ -1,7 +1,11 @@
 package com.example.quizapp.di
 
 import android.content.Context
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.example.quizapp.R
+import com.example.quizapp.feature.data.repository.dto.QuizDto
+import com.example.quizapp.feature.data.repository.impl.QuizRemotePager
 import com.example.quizapp.feature.data.repository.impl.RepositoryImpl
 import com.example.quizapp.feature.domain.repository.Repository
 import com.example.quizapp.feature.domain.util.error.ExceptionHandler
@@ -13,6 +17,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
@@ -38,9 +43,7 @@ object QuizModule {
         firebaseAuth: FirebaseAuth,
         firebaseFirestore: FirebaseFirestore,
         firebaseStorage: FirebaseStorage
-    ): Repository {
-        return RepositoryImpl(firebaseAuth, firebaseFirestore, firebaseStorage)
-    }
+    ): Repository = RepositoryImpl(firebaseAuth, firebaseFirestore, firebaseStorage)
 
     @Provides
     @Singleton
@@ -66,11 +69,18 @@ object QuizModule {
 
     @Provides
     @Singleton
+    fun provideQuizPager(firebaseFirestore: FirebaseFirestore) : Pager<DocumentSnapshot, QuizDto>{
+        return Pager(PagingConfig(pageSize = 20)) {
+            QuizRemotePager(firebaseFirestore)
+        }
+    }
+
+    @Provides
+    @Singleton
     fun getGoogleSignInClient(context: Context): GoogleSignInClient {
         val signInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(context.getString(R.string.web_client_id))
             .build()
-
         return GoogleSignIn.getClient(context, signInOptions)
     }
 
@@ -88,5 +98,4 @@ object QuizModule {
             .setAutoSelectEnabled(true)
             .build()
     }
-
 }

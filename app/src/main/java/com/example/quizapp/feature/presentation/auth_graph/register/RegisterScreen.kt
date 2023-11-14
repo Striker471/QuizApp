@@ -115,7 +115,8 @@ fun RegisterScreen(
             MainActionButton(
                 onClick = { viewModel.onEvent(RegisterEvent.SignUp) },
                 text = stringResource(R.string.sign_up),
-                modifier = Modifier.padding(bottom = 32.dp),
+                modifier = Modifier.padding(bottom = 32.dp)
+                    .fillMaxWidth(0.83f),
                 enabled = !state.isLoading
             )
         }

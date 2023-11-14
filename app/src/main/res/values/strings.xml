@@ -43,6 +43,8 @@
     <string name="views">Views</string>
     <string name="enter_your_question">Enter your question</string>
     <string name="update_question">Update question</string>
+    <string name="solve_quiz">Solve Quiz</string>
+    <string name="solve">Solve</string>
 
 
 </resources>

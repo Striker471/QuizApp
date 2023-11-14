@@ -22,6 +22,7 @@ import com.example.quizapp.feature.presentation.menu_graph.create_question.Creat
 import com.example.quizapp.feature.presentation.menu_graph.create_quiz.CreateQuizScreen
 import com.example.quizapp.feature.presentation.menu_graph.library.LibraryScreen
 import com.example.quizapp.feature.presentation.menu_graph.menu.MenuScreen
+import com.example.quizapp.feature.presentation.menu_graph.menu_quiz.MenuQuizScreen
 import com.example.quizapp.feature.presentation.menu_graph.my_quizzes.MyQuizzesScreen
 import com.example.quizapp.feature.presentation.menu_graph.profile.ProfileScreen
 import com.example.quizapp.feature.presentation.util.NestedGraph
@@ -93,6 +94,20 @@ class MainActivity : ComponentActivity() {
                                 )
                             ) {
                                 CreateQuestionScreen(navController = navController)
+                            }
+                            composable(
+                                route = Screen.MenuQuizScreen.route +
+                                        "?quizId={quizId}",
+                                arguments = listOf(
+                                    navArgument(
+                                        name = "quizId"
+                                    ){
+                                        type = NavType.StringType
+                                        defaultValue = ""
+                                    }
+                                )
+                            ){
+                                MenuQuizScreen(navController = navController)
                             }
                         }
                     }

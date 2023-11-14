@@ -186,7 +186,6 @@ fun CreateQuizScreen(
             MainActionButton(
                 onClick = { viewModel.onEvent(CreateQuizScreenEvent.CreateQuizOnClick) },
                 text = stringResource(R.string.add_question),
-                modifier = Modifier.fillMaxWidth(),
             )
             Spacer(modifier = Modifier.height(16.dp))
         }

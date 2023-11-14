@@ -172,7 +172,8 @@ fun LoginScreen(
             MainActionButton(
                 onClick = { viewModel.onEvent(LoginEvent.SignIn) },
                 text = stringResource(R.string.sign_in),
-                modifier = Modifier.padding(bottom = 32.dp),
+                modifier = Modifier.padding(bottom = 32.dp)
+                    .fillMaxWidth(0.83f),
                 enabled = !state.isLoading
             )
 

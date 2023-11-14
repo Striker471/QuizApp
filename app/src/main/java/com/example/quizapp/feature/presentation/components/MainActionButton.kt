@@ -24,7 +24,7 @@ fun MainActionButton(
     Button(
         onClick = onClick,
         modifier = modifier
-            .fillMaxWidth(0.83f)
+            .fillMaxWidth()
             .height(56.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = colorResource(R.color.purple_button),

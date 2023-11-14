@@ -5,6 +5,7 @@ import com.example.quizapp.feature.domain.model.CreateQuestionToRepositoryData
 import com.example.quizapp.feature.domain.model.CreateQuizData
 import com.example.quizapp.feature.domain.model.QuestionReturnData
 import com.example.quizapp.feature.domain.model.QuestionUpdateToRepositoryData
+import com.google.firebase.firestore.DocumentSnapshot
 
 interface Repository {
 
@@ -26,5 +27,11 @@ interface Repository {
     suspend fun getTheLatestQuizzes(): List<QuizDto>
 
     suspend fun getMostViewedQuizzes() : List<QuizDto>
+
+    suspend fun getQuiz(quizId: String) : QuizDto
+
+    suspend fun getFirstPageOfQuizzes() : List<QuizDto>
+
+    suspend fun getAnotherPageOfQuizzes(document: DocumentSnapshot) : List<QuizDto>
 
 }

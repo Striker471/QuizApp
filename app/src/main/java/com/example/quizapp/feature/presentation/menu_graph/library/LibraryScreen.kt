@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.quizapp.R
 import com.example.quizapp.feature.presentation.bottom_bar.BottomBar
@@ -23,7 +24,8 @@ import com.example.quizapp.feature.presentation.components.CenterTopAppBar
 
 @Composable
 fun LibraryScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: LibraryViewModel = hiltViewModel()
 ) {
 
 

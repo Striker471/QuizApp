@@ -10,7 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -20,17 +22,17 @@ import com.example.quizapp.R
 
 @Composable
 fun QuizCard(
-    title: String = "Quiz losowy",
-    profileUrl: String = "",
+    title: String,
     imageUrl: String? = null,
-    userName: String = "Agnieszka Mrozinska-Skarie",
-
-    ) {
+    userName: String,
+    views: Int = 0,
+    onClick: () -> Unit
+) {
 
     Card(
         modifier = Modifier
             .size(160.dp, 210.dp)
-            .clickable { }
+            .clickable(onClick = onClick)
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -40,20 +42,19 @@ fun QuizCard(
                     .weight(6.2f)
                     .fillMaxWidth()
             ) {
-                if (imageUrl != null) {
+                imageUrl?.let {
                     AsyncImage(
-                        model = imageUrl ,
+                        model = imageUrl,
                         contentDescription = null,
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.FillBounds
                     )
-                } else
-                    Image(
-                        painter = painterResource(R.drawable.image_dog),
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.FillBounds
-                    )
+                } ?: Image(
+                    painter = painterResource(R.drawable.image_dog),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.FillBounds
+                )
             }
             Box(
                 modifier = Modifier
@@ -78,11 +79,21 @@ fun QuizCard(
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
+                        text = stringResource(R.string.views) + ": " + views,
+                        style = MaterialTheme.typography.bodySmall,
+                        fontSize = 10.sp,
+                        lineHeight = 15.sp,
+                        overflow = TextOverflow.Ellipsis,
+                        color = colorResource(R.color.grey_text),
+                        modifier = Modifier
+                            .padding(start = 4.dp)
+                    )
+                    Text(
                         text = userName,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 4.dp)
-                            .wrapContentWidth(Alignment.CenterHorizontally),
+                            .wrapContentWidth(Alignment.Start),
                         style = MaterialTheme.typography.bodySmall,
                         fontSize = 10.sp,
                         lineHeight = 15.sp,

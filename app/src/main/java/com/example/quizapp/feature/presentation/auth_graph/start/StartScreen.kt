@@ -98,7 +98,9 @@ fun StartScreen(
                 Spacer(modifier = Modifier.height(32.dp))
                 MainActionButton(
                     onClick = { navController.navigate(Screen.LoginScreen.route) },
-                    text = stringResource(R.string.login)
+                    text = stringResource(R.string.login),
+                    modifier = Modifier
+                        .fillMaxWidth(0.83f)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(

@@ -122,7 +122,7 @@ fun CreateQuestionScreen(
                 }
 
                 CreateQuestionViewModel.UiEvent.MyQuizzesNavigate -> {
-                    navController.navigate(Screen.MyQuizzesScreen.route){
+                    navController.navigate(Screen.MyQuizzesScreen.route) {
                         popUpTo(Screen.MenuScreen.route)
                     }
                 }
@@ -199,10 +199,9 @@ fun CreateQuestionScreen(
                             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                         )
                     })
-                }else
-                {
+                } else {
                     AsyncImage(
-                        model = if(state.image != null) state.image else state.imageUrl ,
+                        model = state.image ?: state.imageUrl,
                         contentDescription = null,
                         modifier = Modifier
                             .size(240.dp, 180.dp)
@@ -267,7 +266,6 @@ fun CreateQuestionScreen(
                     MainActionButton(
                         onClick = { viewModel.onEvent(CreateQuestionEvent.OnUpdateQuestion) },
                         text = stringResource(R.string.update_question),
-                        modifier = Modifier.fillMaxWidth()
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))

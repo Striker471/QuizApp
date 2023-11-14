@@ -92,7 +92,8 @@ fun ResetPasswordScreen(
                 onClick = { viewModel.onResetPasswordClick() },
                 text = stringResource(R.string.reset_password),
                 modifier = Modifier
-                    .padding(bottom = 32.dp),
+                    .padding(bottom = 32.dp)
+                    .fillMaxWidth(0.83f),
                 enabled = !state.isLoading
             )
         }

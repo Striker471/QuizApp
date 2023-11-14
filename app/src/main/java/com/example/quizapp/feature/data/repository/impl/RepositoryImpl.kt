@@ -3,6 +3,7 @@ package com.example.quizapp.feature.data.repository.impl
 import com.example.quizapp.feature.data.repository.Constants
 import com.example.quizapp.feature.data.repository.Constants.COLLECTION_QUESTIONS
 import com.example.quizapp.feature.data.repository.Constants.COLLECTION_QUIZZES
+import com.example.quizapp.feature.data.repository.Constants.NO_QUIZ_FOUND
 import com.example.quizapp.feature.data.repository.dto.QuestionDto
 import com.example.quizapp.feature.domain.model.CreateQuestionToRepositoryData
 import com.example.quizapp.feature.domain.model.CreateQuizData
@@ -11,14 +12,16 @@ import com.example.quizapp.feature.domain.model.QuestionUpdateToRepositoryData
 import com.example.quizapp.feature.data.repository.dto.QuizDto
 import com.example.quizapp.feature.domain.repository.Repository
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class RepositoryImpl (
+class RepositoryImpl(
     private val firebaseAuth: FirebaseAuth,
     private val firebaseFirestore: FirebaseFirestore,
     private val firebaseStorage: FirebaseStorage
@@ -56,6 +59,7 @@ class RepositoryImpl (
 
         return quizId
     }
+
     override suspend fun addQuestion(
         createQuestionToRepositoryData: CreateQuestionToRepositoryData,
         quizId: String
@@ -176,19 +180,37 @@ class RepositoryImpl (
         return documentSnapshot.toObjects(QuizDto::class.java)
     }
 
-    override suspend fun getMostViewedQuizzes() : List<QuizDto>{
+    override suspend fun getMostViewedQuizzes(): List<QuizDto> {
         val documentSnapshot = firebaseFirestore.collection(COLLECTION_QUIZZES)
-            .orderBy("views", Query.Direction.ASCENDING)
+            .orderBy("views", Query.Direction.DESCENDING)
             .limit(10)
             .get().await()
 
         return documentSnapshot.toObjects(QuizDto::class.java)
     }
 
-//
-//        val textId = fireStoreDatabase.collection("Text").document().id
-//        val pdfReference = Firebase.storage.reference.child("pdfs/${textId}_${fileName}")
-//
-//        val pdfSnapshot = pdfReference.putFile(uri).await()
-//        val downloadUrl = pdfSnapshot.storage.downloadUrl.await()
+    override suspend fun getQuiz(quizId: String): QuizDto {
+        val documentSnapshot = firebaseFirestore.collection(COLLECTION_QUIZZES)
+            .document(quizId).get().await()
+
+        return documentSnapshot.toObject(QuizDto::class.java)
+            ?: throw NoSuchElementException(NO_QUIZ_FOUND + quizId)
+    }
+
+    override suspend fun getFirstPageOfQuizzes(): List<QuizDto> {
+        val documentSnapshot = firebaseFirestore.collection(COLLECTION_QUIZZES)
+            .limit(20)
+            .get().await()
+        return documentSnapshot.toObjects(QuizDto::class.java)
+    }
+
+    override suspend fun getAnotherPageOfQuizzes(document: DocumentSnapshot): List<QuizDto> {
+        val documentSnapshot = document.let {
+            firebaseFirestore.collection(COLLECTION_QUIZZES)
+                .startAfter(it)
+                .limit(20)
+                .get().await()
+        }
+        return documentSnapshot.toObjects(QuizDto::class.java)
+    }
 }

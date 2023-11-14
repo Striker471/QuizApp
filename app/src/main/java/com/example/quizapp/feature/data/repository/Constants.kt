@@ -7,4 +7,5 @@ object Constants {
 
     const val NULL_FIREBASE_USER = "FirebaseUser is null"
     const val NULL_USERNAME_FROM_GOOGLE = "DisplayName from Google account is null"
+    const val NO_QUIZ_FOUND = "No quiz found with id: "
 }
