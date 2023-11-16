@@ -13,8 +13,14 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,7 +31,10 @@ import com.example.quizapp.feature.presentation.bottom_bar.BottomBar
 import com.example.quizapp.feature.presentation.components.CenterTopAppBar
 import com.example.quizapp.feature.presentation.components.MenuCardWithNavigation
 import com.example.quizapp.feature.presentation.components.QuizCard
+import com.example.quizapp.feature.presentation.menu_graph.menu.components.LogoutDropdownMenu
+import com.example.quizapp.feature.presentation.util.NestedGraph
 import com.example.quizapp.feature.presentation.util.Screen
+import kotlinx.coroutines.flow.collectLatest
 
 
 @Composable
@@ -34,6 +43,25 @@ fun MenuScreen(
     viewModel: MenuViewModel = hiltViewModel()
 ) {
     val state by viewModel.state
+    var isDropdownExpanded by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(true) {
+        viewModel.eventFlow.collectLatest {
+            when (it) {
+                is MenuViewModel.UiEvent.Logout -> {
+                    navController.navigate(NestedGraph.AuthGraph.route){
+                        popUpTo(NestedGraph.MenuGraph.route){
+                            inclusive = true
+                        }
+                    }
+                }
+                is MenuViewModel.UiEvent.ShowSnackbar -> {
+                    snackbarHostState.showSnackbar(it.message)
+                }
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -41,11 +69,16 @@ fun MenuScreen(
                 titleText = stringResource(R.string.quizmania),
                 navigationIcon = {
                     IconButton(onClick = {
-                        viewModel.logOut()
+                        isDropdownExpanded = true
                     }) {
                         Icon(
                             imageVector = Icons.Default.Menu,
                             contentDescription = null
+                        )
+                        LogoutDropdownMenu(
+                            expanded = isDropdownExpanded,
+                            onDismiss = { isDropdownExpanded = false },
+                            onLogoutCLick = { viewModel.logOut() }
                         )
                     }
                 },
@@ -53,7 +86,11 @@ fun MenuScreen(
         },
         bottomBar = {
             BottomBar(navController = navController)
-        }) { innerPadding ->
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
+    ) { innerPadding ->
 
         if (state.isLoading) {
             Box(

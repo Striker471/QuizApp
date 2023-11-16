@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,28 +31,24 @@ class MenuViewModel @Inject constructor(
     init {
         getMenuScreenInitData().onEach {
             when (it) {
+                is Resource.Success -> _state.value = it.data
 
+                is Resource.Error -> _eventFlow.emit((UiEvent.ShowSnackbar(it.message)))
 
-                is Resource.Success -> {
-                    _state.value = it.data
-                }
-
-                is Resource.Error -> {
-                    _eventFlow.emit((UiEvent.ShowSnackbar(it.message)))
-                }
-
-                is Resource.Loading -> {
-                    _state.value = _state.value.copy(isLoading = true)
-                }
+                is Resource.Loading -> _state.value = _state.value.copy(isLoading = true)
             }
         }.launchIn(viewModelScope)
     }
 
     fun logOut() {
         authRepository.logOut()
+        viewModelScope.launch {
+            _eventFlow.emit(UiEvent.Logout)
+        }
     }
 
     sealed class UiEvent {
         data class ShowSnackbar(val message: String) : UiEvent()
+        object Logout : UiEvent()
     }
 }
