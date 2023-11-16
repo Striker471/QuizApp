@@ -25,13 +25,13 @@ fun LoadingImage(
     AsyncImage(
         model = imageUrl,
         contentDescription = contentDescription,
-        modifier = Modifier,
+        modifier = modifier,
         contentScale = ContentScale.FillBounds,
         onState = { imageState = it }
     )
 
     if (imageState is AsyncImagePainter.State.Loading) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = modifier.fillMaxSize()) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
     }
