@@ -1,15 +1,11 @@
 package com.example.quizapp.feature.presentation.menu_graph.menu
 
+import com.example.quizapp.feature.domain.model.QuizItem
+
 data class MenuScreenState(
-    val theLatestList: List<ItemScreenData> = emptyList(),
-    val mostPopularList: List<ItemScreenData> = emptyList(),
+    val theLatestList: List<QuizItem> = emptyList(),
+    val mostPopularList: List<QuizItem> = emptyList(),
     val isLoading: Boolean = false
 )
 
-data class ItemScreenData(
-    val imageUrl: String? = null,
-    val title: String,
-    val userName: String,
-    val views: Int = 0,
-    val quizId: String
-)
+

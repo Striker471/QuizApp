@@ -17,7 +17,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import com.example.quizapp.R
 
 @Composable
@@ -43,11 +42,10 @@ fun QuizCard(
                     .fillMaxWidth()
             ) {
                 imageUrl?.let {
-                    AsyncImage(
-                        model = imageUrl,
+                    LoadingImage(
+                        imageUrl = imageUrl,
                         contentDescription = null,
                         modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.FillBounds
                     )
                 } ?: Image(
                     painter = painterResource(R.drawable.image_dog),

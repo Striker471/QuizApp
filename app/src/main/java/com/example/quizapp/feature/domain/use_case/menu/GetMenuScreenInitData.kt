@@ -1,10 +1,11 @@
 package com.example.quizapp.feature.domain.use_case.menu
 
+import com.example.quizapp.feature.data.mappers.toQuizItem
 import com.example.quizapp.feature.data.repository.dto.QuizDto
+import com.example.quizapp.feature.domain.model.QuizItem
 import com.example.quizapp.feature.domain.repository.Repository
 import com.example.quizapp.feature.domain.util.Resource
 import com.example.quizapp.feature.domain.util.error.ExceptionHandler
-import com.example.quizapp.feature.presentation.menu_graph.menu.ItemScreenData
 import com.example.quizapp.feature.presentation.menu_graph.menu.MenuScreenState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -30,15 +31,9 @@ class GetMenuScreenInitData @Inject constructor(
     }.catch(exceptionHandler::handle)
 
 
-    private fun List<QuizDto>.toScreenDataList() :List<ItemScreenData> {
+    private fun List<QuizDto>.toScreenDataList(): List<QuizItem> {
         return this.map {
-            ItemScreenData(
-                imageUrl = it.imageUrl,
-                title = it.title,
-                userName = it.userName,
-                quizId = it.quizId,
-                views = it.views
-            )
+            it.toQuizItem()
         }
     }
 }

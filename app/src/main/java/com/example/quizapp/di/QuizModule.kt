@@ -7,6 +7,7 @@ import com.example.quizapp.R
 import com.example.quizapp.feature.data.repository.dto.QuizDto
 import com.example.quizapp.feature.data.repository.impl.QuizRemotePager
 import com.example.quizapp.feature.data.repository.impl.RepositoryImpl
+import com.example.quizapp.feature.domain.model.QuizItem
 import com.example.quizapp.feature.domain.repository.Repository
 import com.example.quizapp.feature.domain.util.error.ExceptionHandler
 import com.example.quizapp.feature.domain.util.error.createDefaultHandler
@@ -69,7 +70,7 @@ object QuizModule {
 
     @Provides
     @Singleton
-    fun provideQuizPager(firebaseFirestore: FirebaseFirestore) : Pager<DocumentSnapshot, QuizDto>{
+    fun provideQuizPager(firebaseFirestore: FirebaseFirestore) : Pager<DocumentSnapshot, QuizItem>{
         return Pager(PagingConfig(pageSize = 20)) {
             QuizRemotePager(firebaseFirestore)
         }

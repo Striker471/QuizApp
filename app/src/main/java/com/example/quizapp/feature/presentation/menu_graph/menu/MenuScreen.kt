@@ -45,7 +45,7 @@ fun MenuScreen(
                     }) {
                         Icon(
                             imageVector = Icons.Default.Menu,
-                            contentDescription = "Menu"
+                            contentDescription = null
                         )
                     }
                 },
@@ -63,7 +63,6 @@ fun MenuScreen(
                 CircularProgressIndicator()
             }
         } else {
-
             Column(
                 modifier = Modifier
                     .padding(
