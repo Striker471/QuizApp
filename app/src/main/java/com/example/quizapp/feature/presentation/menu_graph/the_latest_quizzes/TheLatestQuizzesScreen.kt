@@ -1,4 +1,4 @@
-package com.example.quizapp.feature.presentation.menu_graph.library
+package com.example.quizapp.feature.presentation.menu_graph.the_latest_quizzes
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -26,18 +27,19 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.quizapp.R
 import com.example.quizapp.feature.presentation.bottom_bar.BottomBar
 import com.example.quizapp.feature.presentation.components.CenterTopAppBar
 import com.example.quizapp.feature.presentation.components.QuizCard
+import com.example.quizapp.feature.presentation.menu_graph.library.LibraryViewModel
+import com.example.quizapp.feature.presentation.util.Screen
 
 
 @Composable
-fun LibraryScreen(
+fun TheLatestQuizzesScreen(
     navController: NavController,
-    viewModel: LibraryViewModel = hiltViewModel()
+    viewModel: TheLatestQuizzesViewModel = hiltViewModel()
 ) {
     val quizzes = viewModel.quizPagingFlow.collectAsLazyPagingItems()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -53,20 +55,26 @@ fun LibraryScreen(
     Scaffold(
         topBar = {
             CenterTopAppBar(
-                titleText = stringResource(R.string.library)
+                titleText = stringResource(R.string.the_latest),
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.popBackStack()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = null
+                        )
+                    }
+                },
             )
         },
-        bottomBar = {
-            BottomBar(navController = navController)
-        },
-
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         }
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .padding(innerPadding)
+                .padding(top = innerPadding.calculateTopPadding())
                 .fillMaxSize()
         ) {
             if (quizzes.loadState.refresh is LoadState.Loading) {
@@ -110,4 +118,3 @@ fun LibraryScreen(
         }
     }
 }
-

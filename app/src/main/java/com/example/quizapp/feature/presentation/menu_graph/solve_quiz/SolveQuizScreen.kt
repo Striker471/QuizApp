@@ -45,7 +45,7 @@ fun SolveQuizScreen(
     navController: NavController,
     viewModel: SolveQuizViewModel = hiltViewModel()
 ) {
-    val state by viewModel.state
+    val state = viewModel.state
     val timer by viewModel.timer.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -57,7 +57,7 @@ fun SolveQuizScreen(
                 }
 
                 SolveQuizViewModel.UiEvent.NavigateToSubmit -> {
-                    navController.navigate(Screen.SubmitQuiz.route
+                    navController.navigate(Screen.SubmitQuizScreen.route
 
 
 //                            navController.navigate(
@@ -66,9 +66,15 @@ fun SolveQuizScreen(
 //                            )
 
                     ) {
-                        popUpTo(Screen.MenuScreen.route)
+                        popUpTo(Screen.MenuScreen.route){
+                        }
                     }
                 }
+
+                SolveQuizViewModel.UiEvent.MenuNavigate ->
+                    navController.navigate(Screen.MenuScreen.route){
+                        popUpTo(Screen.MenuScreen.route)
+                    }
             }
         }
     }

@@ -33,9 +33,9 @@ fun MenuCardWithNavigation(
             style = MaterialTheme.typography.headlineMedium
         )
         Row(
-            modifier = Modifier.clickable(onClick = {
-                onClick
-            }),
+            modifier = Modifier.clickable(
+                onClick = onClick
+            ),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(

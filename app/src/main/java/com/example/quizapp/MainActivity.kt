@@ -23,10 +23,12 @@ import com.example.quizapp.feature.presentation.menu_graph.create_quiz.CreateQui
 import com.example.quizapp.feature.presentation.menu_graph.library.LibraryScreen
 import com.example.quizapp.feature.presentation.menu_graph.menu.MenuScreen
 import com.example.quizapp.feature.presentation.menu_graph.menu_quiz.MenuQuizScreen
+import com.example.quizapp.feature.presentation.menu_graph.most_viewed_quizzes.MostViewedQuizzesScreen
 import com.example.quizapp.feature.presentation.menu_graph.my_quizzes.MyQuizzesScreen
 import com.example.quizapp.feature.presentation.menu_graph.profile.ProfileScreen
 import com.example.quizapp.feature.presentation.menu_graph.solve_quiz.SolveQuizScreen
 import com.example.quizapp.feature.presentation.menu_graph.submit_quiz.SubmitQuizScreen
+import com.example.quizapp.feature.presentation.menu_graph.the_latest_quizzes.TheLatestQuizzesScreen
 import com.example.quizapp.feature.presentation.util.NestedGraph
 import com.example.quizapp.feature.presentation.util.Screen
 import com.example.quizapp.ui.theme.QuizAppTheme
@@ -126,7 +128,7 @@ class MainActivity : ComponentActivity() {
                                 SolveQuizScreen(navController = navController)
                             }
                             composable(
-                                route = Screen.SubmitQuiz.route +
+                                route = Screen.SubmitQuizScreen.route +
                                         "?score={score}",
                                 arguments = listOf(
                                     navArgument(
@@ -138,6 +140,12 @@ class MainActivity : ComponentActivity() {
                                 )
                             ){
                                 SubmitQuizScreen(navController = navController)
+                            }
+                            composable(Screen.TheLatestQuizzesScreen.route){
+                                TheLatestQuizzesScreen(navController = navController)
+                            }
+                            composable(Screen.MostViewedQuizzesScreen.route){
+                                MostViewedQuizzesScreen(navController = navController)
                             }
                         }
                     }

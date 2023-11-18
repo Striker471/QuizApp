@@ -1,6 +1,5 @@
 package com.example.quizapp.feature.presentation.menu_graph.solve_quiz
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -31,9 +30,8 @@ class SolveQuizViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-
-    private val _state = mutableStateOf(SolveQuizState())
-    val state: State<SolveQuizState> = _state
+    var state by mutableStateOf(SolveQuizState())
+        private set
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -52,13 +50,18 @@ class SolveQuizViewModel @Inject constructor(
             quizId = it
             getQuestionsToSolve(it).onEach { result ->
                 when (result) {
-                    is Resource.Error -> _eventFlow.emit(UiEvent.ShowSnackbar(result.message))
-                    is Resource.Loading -> _state.value = state.value.copy(
+                    is Resource.Error -> {
+                        _eventFlow.emit(UiEvent.ShowSnackbar(result.message))
+                        delay(3000)
+                        _eventFlow.emit(UiEvent.MenuNavigate)
+                    }
+                    is Resource.Loading -> state = state.copy(
                         isLoading = true
                     )
 
                     is Resource.Success -> {
-                        _state.value = result.data.copy(
+
+                        state = result.data.copy(
                             isLoading = false
                         )
                         startTimer()
@@ -68,7 +71,7 @@ class SolveQuizViewModel @Inject constructor(
         }
     }
 
-    fun startTimer() {
+    private fun startTimer() {
         timerJob?.cancel()
         secondTimer = getCurrentQuestion().selectedTime
         var iterations = 0
@@ -99,14 +102,15 @@ class SolveQuizViewModel @Inject constructor(
     sealed class UiEvent {
         data class ShowSnackbar(val message: String) : UiEvent()
         object NavigateToSubmit : UiEvent()
+        object MenuNavigate : UiEvent()
     }
 
     private fun getCurrentQuestion(): SolveQuizQuestionData {
-        return _state.value.questionList[_state.value.currentQuestion]
+        return state.questionList[state.currentQuestion]
     }
 
     private fun processSelectedAnswer(answerId: Int) {
-        _state.value = _state.value.copy(
+        state = state.copy(
             selectedAnswer = answerId,
             areButtonsEnabled = false
         )
@@ -127,11 +131,11 @@ class SolveQuizViewModel @Inject constructor(
     }
 
     private suspend fun handleAnswerSelectedSuccess() {
-        _state.value = _state.value.copy(
-            score = _state.value.score + getScoreFromSelectedQuestion()
+        state = state.copy(
+            score = state.score + getScoreFromSelectedQuestion()
         )
         delay(3000)
-        val isLastQuestion = _state.value.currentQuestion == _state.value.questionList.size - 1
+        val isLastQuestion = state.currentQuestion == state.questionList.size - 1
         if (isLastQuestion) {
             finishQuiz()
         } else {
@@ -140,8 +144,8 @@ class SolveQuizViewModel @Inject constructor(
     }
 
     private fun moveToNextQuestion() {
-        val nextQuestionIndex = _state.value.currentQuestion + 1
-        _state.value = _state.value.copy(
+        val nextQuestionIndex = state.currentQuestion + 1
+        state = state.copy(
             currentQuestion = nextQuestionIndex,
             selectedAnswer = -1,
             areButtonsEnabled = true
@@ -151,7 +155,7 @@ class SolveQuizViewModel @Inject constructor(
     }
 
     private fun finishQuiz() {
-        finishSolvingQuiz(quizId, _state.value.score).onEach {
+        finishSolvingQuiz(quizId, state.score).onEach {
             when (it) {
                 is Resource.Error -> _eventFlow.emit(UiEvent.ShowSnackbar(it.message))
                 Resource.Loading -> {}
@@ -161,7 +165,7 @@ class SolveQuizViewModel @Inject constructor(
     }
 
     private fun getScoreFromSelectedQuestion(): Int {
-        if (_state.value.selectedAnswer == getCurrentQuestion().correctAnswerIndex) {
+        if (state.selectedAnswer == getCurrentQuestion().correctAnswerIndex) {
             return 20 + (timer.value * 20).toInt()
         }
         return 0

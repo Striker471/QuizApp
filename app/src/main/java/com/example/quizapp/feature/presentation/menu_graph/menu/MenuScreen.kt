@@ -50,12 +50,13 @@ fun MenuScreen(
         viewModel.eventFlow.collectLatest {
             when (it) {
                 is MenuViewModel.UiEvent.Logout -> {
-                    navController.navigate(NestedGraph.AuthGraph.route){
-                        popUpTo(NestedGraph.MenuGraph.route){
+                    navController.navigate(NestedGraph.AuthGraph.route) {
+                        popUpTo(NestedGraph.MenuGraph.route) {
                             inclusive = true
                         }
                     }
                 }
+
                 is MenuViewModel.UiEvent.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(it.message)
                 }
@@ -113,7 +114,7 @@ fun MenuScreen(
                 Spacer(modifier = Modifier.height(32.dp))
                 MenuCardWithNavigation(
                     title = stringResource(R.string.the_latest),
-                    onClick = {}
+                    onClick = { navController.navigate(Screen.TheLatestQuizzesScreen.route) }
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 LazyRow(
@@ -141,7 +142,7 @@ fun MenuScreen(
 
                 MenuCardWithNavigation(
                     title = stringResource(R.string.most_popular),
-                    onClick = {}
+                    onClick = { navController.navigate(Screen.MostViewedQuizzesScreen.route) }
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 LazyRow(

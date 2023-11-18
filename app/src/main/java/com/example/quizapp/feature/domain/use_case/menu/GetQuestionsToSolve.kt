@@ -23,6 +23,10 @@ class GetQuestionsToSolve @Inject constructor(
         val quizWithQuestions = repository.getQuestionsOfQuiz(quizId)
 
         val randomQuestions = quizWithQuestions.questions.shuffled().take(10)
+        if(randomQuestions.isEmpty()) {
+            emit(Resource.Error("Cannot find questions"))
+            return@flow
+        }
 
         val questionSolveQuizData = randomQuestions.map {
             it.toQuestionSolveQuizData()

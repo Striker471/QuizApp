@@ -276,9 +276,23 @@ class RepositoryImpl(
         )
 
         withTimeout(10000) {
+            incrementQuizViews(quizId)
             firebaseFirestore
                 .collection(COLLECTION_USER_QUIZZES)
                 .add(userQuizResultData).await()
         }
+    }
+
+    override suspend fun incrementQuizViews(quizId: String) {
+
+        val questionRef = firebaseFirestore
+            .collection(COLLECTION_QUIZZES)
+            .document(quizId)
+
+        val updates = mutableMapOf<String, Any>()
+
+        updates["views"] = FieldValue.increment(1)
+
+        questionRef.update(updates).await()
     }
 }

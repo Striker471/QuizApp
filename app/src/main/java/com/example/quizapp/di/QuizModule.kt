@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.example.quizapp.R
-import com.example.quizapp.feature.data.repository.dto.QuizDto
+import com.example.quizapp.feature.data.repository.Pagers
+import com.example.quizapp.feature.data.repository.impl.QuizMostViewedRemotePager
 import com.example.quizapp.feature.data.repository.impl.QuizRemotePager
+import com.example.quizapp.feature.data.repository.impl.QuizTheLatestRemotePager
 import com.example.quizapp.feature.data.repository.impl.RepositoryImpl
 import com.example.quizapp.feature.domain.model.QuizItem
 import com.example.quizapp.feature.domain.repository.Repository
@@ -26,6 +28,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -70,11 +73,31 @@ object QuizModule {
 
     @Provides
     @Singleton
-    fun provideQuizPager(firebaseFirestore: FirebaseFirestore) : Pager<DocumentSnapshot, QuizItem>{
+    @Named(Pagers.QUIZ_PAGER)
+    fun provideQuizPager(firebaseFirestore: FirebaseFirestore): Pager<DocumentSnapshot, QuizItem> {
         return Pager(PagingConfig(pageSize = 20)) {
             QuizRemotePager(firebaseFirestore)
         }
     }
+
+    @Provides
+    @Singleton
+    @Named(Pagers.LATEST_QUIZ_PAGER)
+    fun provideLatestQuizPager(firebaseFirestore: FirebaseFirestore): Pager<DocumentSnapshot, QuizItem> {
+        return Pager(PagingConfig(pageSize = 20)) {
+            QuizTheLatestRemotePager(firebaseFirestore)
+        }
+    }
+
+    @Provides
+    @Singleton
+    @Named(Pagers.MOST_VIEWED_QUIZ_PAGER)
+    fun provideMostViewedtQuizPager(firebaseFirestore: FirebaseFirestore): Pager<DocumentSnapshot, QuizItem> {
+        return Pager(PagingConfig(pageSize = 20)) {
+            QuizMostViewedRemotePager(firebaseFirestore)
+        }
+    }
+
 
     @Provides
     @Singleton

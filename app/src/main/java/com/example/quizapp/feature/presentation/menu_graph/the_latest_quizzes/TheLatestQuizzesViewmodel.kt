@@ -1,4 +1,4 @@
-package com.example.quizapp.feature.presentation.menu_graph.library
+package com.example.quizapp.feature.presentation.menu_graph.the_latest_quizzes
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,13 +12,12 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @HiltViewModel
-class LibraryViewModel @Inject constructor(
-    @Named(Pagers.QUIZ_PAGER) private val pager: Pager<DocumentSnapshot, QuizItem>
+class TheLatestQuizzesViewModel @Inject constructor(
+    @Named(Pagers.LATEST_QUIZ_PAGER) private val pager: Pager<DocumentSnapshot, QuizItem>
 ) : ViewModel() {
 
     val quizPagingFlow = pager
         .flow
         .cachedIn(viewModelScope)
-
 
 }
