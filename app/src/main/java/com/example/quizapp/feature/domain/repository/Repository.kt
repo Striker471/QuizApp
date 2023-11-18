@@ -1,10 +1,13 @@
 package com.example.quizapp.feature.domain.repository
 
+import com.example.quizapp.feature.data.repository.dto.QuestionDto
 import com.example.quizapp.feature.data.repository.dto.QuizDto
 import com.example.quizapp.feature.domain.model.CreateQuestionToRepositoryData
 import com.example.quizapp.feature.domain.model.CreateQuizData
 import com.example.quizapp.feature.domain.model.QuestionReturnData
 import com.example.quizapp.feature.domain.model.QuestionUpdateToRepositoryData
+import com.example.quizapp.feature.domain.model.QuizWithQuestions
+import com.example.quizapp.feature.domain.model.SendQuestionStatsData
 import com.google.firebase.firestore.DocumentSnapshot
 
 interface Repository {
@@ -26,12 +29,18 @@ interface Repository {
 
     suspend fun getTheLatestQuizzes(): List<QuizDto>
 
-    suspend fun getMostViewedQuizzes() : List<QuizDto>
+    suspend fun getMostViewedQuizzes(): List<QuizDto>
 
-    suspend fun getQuiz(quizId: String) : QuizDto
+    suspend fun getQuiz(quizId: String): QuizDto
 
-    suspend fun getFirstPageOfQuizzes() : List<QuizDto>
+    suspend fun getFirstPageOfQuizzes(): List<QuizDto>
 
-    suspend fun getAnotherPageOfQuizzes(document: DocumentSnapshot) : List<QuizDto>
+    suspend fun getAnotherPageOfQuizzes(document: DocumentSnapshot): List<QuizDto>
+
+    suspend fun getQuestionsOfQuiz(quizId: String): QuizWithQuestions
+
+    suspend fun sendStatsOfQuestionToDb(data: SendQuestionStatsData)
+
+    suspend fun completeQuiz(quizId: String, score: Int)
 
 }

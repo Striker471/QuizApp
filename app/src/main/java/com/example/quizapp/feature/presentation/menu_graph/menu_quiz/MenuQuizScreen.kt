@@ -131,7 +131,12 @@ fun MenuQuizScreen(
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 MainActionButton(
-                    onClick = { },
+                    onClick = {
+                        navController.navigate(
+                            Screen.SolveQuizScreen.route
+                                    + "?quizId=${state.quizId}"
+                        )
+                    },
                     text = stringResource(R.string.solve)
                 )
                 Spacer(modifier = Modifier.height(32.dp))

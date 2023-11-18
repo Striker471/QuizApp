@@ -25,6 +25,8 @@ import com.example.quizapp.feature.presentation.menu_graph.menu.MenuScreen
 import com.example.quizapp.feature.presentation.menu_graph.menu_quiz.MenuQuizScreen
 import com.example.quizapp.feature.presentation.menu_graph.my_quizzes.MyQuizzesScreen
 import com.example.quizapp.feature.presentation.menu_graph.profile.ProfileScreen
+import com.example.quizapp.feature.presentation.menu_graph.solve_quiz.SolveQuizScreen
+import com.example.quizapp.feature.presentation.menu_graph.submit_quiz.SubmitQuizScreen
 import com.example.quizapp.feature.presentation.util.NestedGraph
 import com.example.quizapp.feature.presentation.util.Screen
 import com.example.quizapp.ui.theme.QuizAppTheme
@@ -87,7 +89,7 @@ class MainActivity : ComponentActivity() {
                                 arguments = listOf(
                                     navArgument(
                                         name = "quizId"
-                                    ){
+                                    ) {
                                         type = NavType.StringType
                                         defaultValue = ""
                                     }
@@ -101,17 +103,44 @@ class MainActivity : ComponentActivity() {
                                 arguments = listOf(
                                     navArgument(
                                         name = "quizId"
-                                    ){
+                                    ) {
                                         type = NavType.StringType
                                         defaultValue = ""
                                     }
                                 )
-                            ){
+                            ) {
                                 MenuQuizScreen(navController = navController)
+                            }
+                            composable(
+                                route = Screen.SolveQuizScreen.route +
+                                        "?quizId={quizId}",
+                                arguments = listOf(
+                                    navArgument(
+                                        name = "quizId"
+                                    ) {
+                                        type = NavType.StringType
+                                        defaultValue = ""
+                                    }
+                                )
+                            ) {
+                                SolveQuizScreen(navController = navController)
+                            }
+                            composable(
+                                route = Screen.SubmitQuiz.route +
+                                        "?score={score}",
+                                arguments = listOf(
+                                    navArgument(
+                                        name = "score"
+                                    ) {
+                                        type = NavType.IntType
+                                        defaultValue = 0
+                                    }
+                                )
+                            ){
+                                SubmitQuizScreen(navController = navController)
                             }
                         }
                     }
-
                 }
             }
         }

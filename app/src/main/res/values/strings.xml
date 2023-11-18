@@ -46,6 +46,7 @@
     <string name="solve_quiz">Solve Quiz</string>
     <string name="solve">Solve</string>
     <string name="logout">Logout</string>
+    <string name="score">Score</string>
 
 
 </resources>

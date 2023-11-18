@@ -3,6 +3,7 @@ package com.example.quizapp.feature.data.repository.impl
 import com.example.quizapp.feature.data.repository.Constants
 import com.example.quizapp.feature.data.repository.Constants.COLLECTION_QUESTIONS
 import com.example.quizapp.feature.data.repository.Constants.COLLECTION_QUIZZES
+import com.example.quizapp.feature.data.repository.Constants.COLLECTION_USER_QUIZZES
 import com.example.quizapp.feature.data.repository.Constants.NO_QUIZ_FOUND
 import com.example.quizapp.feature.data.repository.dto.QuestionDto
 import com.example.quizapp.feature.domain.model.CreateQuestionToRepositoryData
@@ -10,7 +11,11 @@ import com.example.quizapp.feature.domain.model.CreateQuizData
 import com.example.quizapp.feature.domain.model.QuestionReturnData
 import com.example.quizapp.feature.domain.model.QuestionUpdateToRepositoryData
 import com.example.quizapp.feature.data.repository.dto.QuizDto
+import com.example.quizapp.feature.data.repository.dto.UserQuizResultDto
+import com.example.quizapp.feature.domain.model.QuizWithQuestions
+import com.example.quizapp.feature.domain.model.SendQuestionStatsData
 import com.example.quizapp.feature.domain.repository.Repository
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
@@ -19,6 +24,8 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withTimeout
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class RepositoryImpl(
@@ -155,8 +162,11 @@ class RepositoryImpl(
     override suspend fun deleteQuestion(quizId: String, questionId: String) {
 
 
-        val questionDocRef = firebaseFirestore.collection(COLLECTION_QUIZZES)
-            .document(quizId).collection(COLLECTION_QUESTIONS).document(questionId)
+        val questionDocRef = firebaseFirestore
+            .collection(COLLECTION_QUIZZES)
+            .document(quizId)
+            .collection(COLLECTION_QUESTIONS)
+            .document(questionId)
 
         val documentSnapshot = questionDocRef.get().await()
         val question = documentSnapshot.toObject(QuestionDto::class.java)
@@ -172,7 +182,8 @@ class RepositoryImpl(
 
     override suspend fun getTheLatestQuizzes(): List<QuizDto> {
 
-        val documentSnapshot = firebaseFirestore.collection(COLLECTION_QUIZZES)
+        val documentSnapshot = firebaseFirestore
+            .collection(COLLECTION_QUIZZES)
             .orderBy("createdAt", Query.Direction.DESCENDING)
             .limit(10)
             .get().await()
@@ -181,7 +192,8 @@ class RepositoryImpl(
     }
 
     override suspend fun getMostViewedQuizzes(): List<QuizDto> {
-        val documentSnapshot = firebaseFirestore.collection(COLLECTION_QUIZZES)
+        val documentSnapshot = firebaseFirestore
+            .collection(COLLECTION_QUIZZES)
             .orderBy("views", Query.Direction.DESCENDING)
             .limit(10)
             .get().await()
@@ -190,7 +202,8 @@ class RepositoryImpl(
     }
 
     override suspend fun getQuiz(quizId: String): QuizDto {
-        val documentSnapshot = firebaseFirestore.collection(COLLECTION_QUIZZES)
+        val documentSnapshot = firebaseFirestore
+            .collection(COLLECTION_QUIZZES)
             .document(quizId).get().await()
 
         return documentSnapshot.toObject(QuizDto::class.java)
@@ -198,7 +211,8 @@ class RepositoryImpl(
     }
 
     override suspend fun getFirstPageOfQuizzes(): List<QuizDto> {
-        val documentSnapshot = firebaseFirestore.collection(COLLECTION_QUIZZES)
+        val documentSnapshot = firebaseFirestore
+            .collection(COLLECTION_QUIZZES)
             .limit(20)
             .get().await()
         return documentSnapshot.toObjects(QuizDto::class.java)
@@ -206,11 +220,65 @@ class RepositoryImpl(
 
     override suspend fun getAnotherPageOfQuizzes(document: DocumentSnapshot): List<QuizDto> {
         val documentSnapshot = document.let {
-            firebaseFirestore.collection(COLLECTION_QUIZZES)
+            firebaseFirestore
+                .collection(COLLECTION_QUIZZES)
                 .startAfter(it)
                 .limit(20)
                 .get().await()
         }
         return documentSnapshot.toObjects(QuizDto::class.java)
+    }
+
+    override suspend fun getQuestionsOfQuiz(quizId: String): QuizWithQuestions {
+        val quizSnapshot = firebaseFirestore
+            .collection(COLLECTION_QUIZZES)
+            .document(quizId)
+            .get().await()
+        val quizDto = quizSnapshot.toObject(QuizDto::class.java)
+            ?: throw NoSuchElementException(NO_QUIZ_FOUND + quizId)
+
+        val questionSnapshot = quizSnapshot.reference
+            .collection(COLLECTION_QUESTIONS)
+            .get().await()
+
+        val questionDtoList = questionSnapshot.toObjects(QuestionDto::class.java)
+
+        return QuizWithQuestions(quizDto, questionDtoList)
+    }
+
+    override suspend fun sendStatsOfQuestionToDb(data: SendQuestionStatsData) {
+        val questionRef = firebaseFirestore
+            .collection(COLLECTION_QUIZZES)
+            .document(data.quizId)
+            .collection(COLLECTION_QUESTIONS)
+            .document(data.questionId)
+
+        val updates = mutableMapOf<String, Any>()
+
+        updates["attempts"] = FieldValue.increment(1)
+
+        if (data.isSelectCorrectQuestion) {
+            updates["correctAttempts"] = FieldValue.increment(1)
+        }
+        withTimeout(10000) {
+            questionRef.update(updates).await()
+        }
+    }
+
+    override suspend fun completeQuiz(quizId: String, score: Int) {
+        val uid = firebaseAuth.currentUser?.uid ?: throw Exception(Constants.NULL_FIREBASE_USER)
+
+        val userQuizResultData = hashMapOf(
+            "userId" to uid,
+            "quizId" to quizId,
+            "score" to score,
+            "completedAt" to FieldValue.serverTimestamp()
+        )
+
+        withTimeout(10000) {
+            firebaseFirestore
+                .collection(COLLECTION_USER_QUIZZES)
+                .add(userQuizResultData).await()
+        }
     }
 }

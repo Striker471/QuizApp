@@ -12,6 +12,8 @@ sealed class Screen(val route: String) {
     object MyQuizzesScreen : Screen("my_quizzes_screen")
     object LibraryScreen : Screen("library_screen")
     object MenuQuizScreen : Screen("menu_quiz_screen")
+    object SolveQuizScreen : Screen("solve_quiz_screen")
+    object SubmitQuiz : Screen("submit_quiz")
 
 
 }

@@ -19,6 +19,10 @@
     <color name="onPurpleButton">#FFFFFFFF</color>
     <color name="image_card">#FFE6E0E9</color>
     <color name="green_card">#FF8AE8A4</color>
+    <color name="grey">#FFCCC2DC</color>
+    <color name="red">#FF4237</color>
+    <color name="yellow">#FFE500</color>
+    <color name="green">#00D509</color>
 
 
 </resources>
