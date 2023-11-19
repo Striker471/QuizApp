@@ -21,12 +21,12 @@ class QuizTheLatestRemotePager (
                 firebaseFirestore.collection(COLLECTION_QUIZZES)
                     .orderBy("createdAt", Query.Direction.DESCENDING)
                     .startAfter(it)
-                    .limit(20)
+                    .limit(50)
                     .get().await()
 
             } ?: firebaseFirestore.collection(COLLECTION_QUIZZES)
                 .orderBy("createdAt", Query.Direction.DESCENDING)
-                .limit(20)
+                .limit(50)
                 .get().await()
 
             val quizList = documentSnapshot.toObjects(QuizDto::class.java)

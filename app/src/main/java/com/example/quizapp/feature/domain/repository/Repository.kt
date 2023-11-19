@@ -44,5 +44,6 @@ interface Repository {
     suspend fun completeQuiz(quizId: String, score: Int)
 
     suspend fun incrementQuizViews(quizId: String)
+    suspend fun getMyQuizzes(): List<QuizDto>
 
 }

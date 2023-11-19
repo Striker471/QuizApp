@@ -22,65 +22,64 @@ import com.example.quizapp.R
 
 @Composable
 fun QuizCardMyProfile(
-    title: String = "Quiz losowy ",
-    quizUrl: String = "",
-    views: Int = 0
+    title: String = "Quizw",
+    quizUrl: String? = null,
+    views: Int = 0,
+    onClick: () -> Unit = { }
 ) {
     Card(
         modifier = Modifier
-            .size(160.dp, 190.dp)
-            .clickable { }
+            .fillMaxWidth(0.9f)
+            .clickable(
+                onClick = onClick
+            )
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Box(
-                modifier = Modifier
-                    .weight(6.9f)
-                    .fillMaxWidth()
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.image_dog),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.FillBounds
+            quizUrl?.let {
+                LoadingImage(
+                    imageUrl = it,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(4f / 3f),
                 )
-            }
-            Box(
+            } ?: Image(
+                painter = painterResource(R.drawable.image_dog),
+                contentDescription = null,
                 modifier = Modifier
-                    .weight(3.1f)
                     .fillMaxWidth()
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = title,
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(horizontal = 8.dp),
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontSize = 12.sp,
-                        lineHeight = 18.sp,
-                        textAlign = TextAlign.Center,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    Text(
-                        text = stringResource(R.string.views) + ": " + views,
-                        style = MaterialTheme.typography.bodySmall,
-                        fontSize = 10.sp,
-                        lineHeight = 15.sp,
-                        overflow = TextOverflow.Ellipsis,
-                        color = colorResource(R.color.grey_text),
-                        modifier = Modifier
-                            .padding(start = 4.dp)
-                    )
+                    .aspectRatio(4f / 3f),
+                contentScale = ContentScale.FillBounds
+            )
 
-                    Spacer(modifier = Modifier.height(2.dp))
-                }
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = title,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(horizontal = 8.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontSize = 16.sp,
+                    lineHeight = 24.sp,
+                    textAlign = TextAlign.Center,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = stringResource(R.string.views) + ": " + views,
+                    style = MaterialTheme.typography.bodySmall,
+                    fontSize = 12.sp,
+                    lineHeight = 18.sp,
+                    overflow = TextOverflow.Ellipsis,
+                    color = colorResource(R.color.grey_text),
+                    modifier = Modifier
+                        .padding(start = 4.dp)
+                )
+                Spacer(modifier = Modifier.height(2.dp))
             }
         }
     }

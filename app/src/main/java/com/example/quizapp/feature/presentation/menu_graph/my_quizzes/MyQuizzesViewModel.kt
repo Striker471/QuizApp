@@ -1,17 +1,51 @@
 package com.example.quizapp.feature.presentation.menu_graph.my_quizzes
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.quizapp.feature.domain.model.QuizData
+import com.example.quizapp.feature.domain.use_case.menu.GetMyQuizzes
+import com.example.quizapp.feature.domain.util.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
+@HiltViewModel
 class MyQuizzesViewModel @Inject constructor(
+    private val getMyQuizzes: GetMyQuizzes
+) : ViewModel() {
 
-) :ViewModel() {
 
-    private val _searchText = MutableStateFlow("")
-    val searchText = _searchText.asStateFlow()
+    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
+
+    private var unfilteredList by mutableStateOf(emptyList<QuizData>())
+    var state by mutableStateOf(MyQuizzesState())
+        private set
+
+
+    init {
+        getMyQuizzes().onEach {
+            when (it) {
+                is Resource.Error -> _eventFlow.emit(UiEvent.ShowSnackbar(it.message))
+                Resource.Loading -> {}
+                is Resource.Success -> {
+                    state = state.copy(
+                        listOfQuizzes = it.data
+                    )
+                    unfilteredList = it.data
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
 
 //    private val _persons = MutableStateFlow(allPersons)
 //    val persons = searchText
@@ -35,9 +69,22 @@ class MyQuizzesViewModel @Inject constructor(
 //        )
 
 
-
     fun onSearchTextChange(text: String) {
-        _searchText.value = text
+        state = state.copy(
+            searchText = text
+        )
+        filterList()
     }
 
+    private fun filterList() {
+        state = state.copy(
+            listOfQuizzes = unfilteredList.filter {
+                it.title.contains(state.searchText, ignoreCase = true)
+            }
+        )
+    }
+
+    sealed class UiEvent {
+        data class ShowSnackbar(val message: String) : UiEvent()
+    }
 }

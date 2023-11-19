@@ -5,6 +5,7 @@ import com.example.quizapp.feature.data.repository.Constants.COLLECTION_QUESTION
 import com.example.quizapp.feature.data.repository.Constants.COLLECTION_QUIZZES
 import com.example.quizapp.feature.data.repository.Constants.COLLECTION_USER_QUIZZES
 import com.example.quizapp.feature.data.repository.Constants.NO_QUIZ_FOUND
+import com.example.quizapp.feature.data.repository.Constants.NULL_FIREBASE_USER
 import com.example.quizapp.feature.data.repository.dto.QuestionDto
 import com.example.quizapp.feature.domain.model.CreateQuestionToRepositoryData
 import com.example.quizapp.feature.domain.model.CreateQuizData
@@ -113,8 +114,11 @@ class RepositoryImpl(
 
         firebaseAuth.currentUser?.uid ?: throw Exception(Constants.NULL_FIREBASE_USER)
 
-        val questionRef = firebaseFirestore.collection(COLLECTION_QUIZZES).document(quizId)
-            .collection(COLLECTION_QUESTIONS).document(questionId)
+        val questionRef = firebaseFirestore
+            .collection(COLLECTION_QUIZZES)
+            .document(quizId)
+            .collection(COLLECTION_QUESTIONS)
+            .document(questionId)
 
         val currentData = questionRef.get().await().toObject(QuestionDto::class.java)
 
@@ -294,5 +298,16 @@ class RepositoryImpl(
         updates["views"] = FieldValue.increment(1)
 
         questionRef.update(updates).await()
+    }
+
+    override suspend fun getMyQuizzes(): List<QuizDto> {
+        val uid = firebaseAuth.currentUser?.uid ?: throw Exception(NULL_FIREBASE_USER)
+
+        val documentSnapshot = firebaseFirestore
+            .collection(COLLECTION_QUIZZES)
+            .whereEqualTo("authorId", uid)
+            .get().await()
+
+        return documentSnapshot.toObjects(QuizDto::class.java)
     }
 }

@@ -31,6 +31,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.quizapp.R
 import com.example.quizapp.feature.presentation.bottom_bar.BottomBar
 import com.example.quizapp.feature.presentation.components.CenterTopAppBar
+import com.example.quizapp.feature.presentation.components.LazyPagingGridQuiz
 import com.example.quizapp.feature.presentation.components.QuizCard
 import com.example.quizapp.feature.presentation.menu_graph.library.LibraryViewModel
 import com.example.quizapp.feature.presentation.util.Screen
@@ -42,79 +43,10 @@ fun TheLatestQuizzesScreen(
     viewModel: TheLatestQuizzesViewModel = hiltViewModel()
 ) {
     val quizzes = viewModel.quizPagingFlow.collectAsLazyPagingItems()
-    val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(key1 = quizzes.loadState) {
-        if (quizzes.loadState.refresh is LoadState.Error) {
-            snackbarHostState.showSnackbar(
-                "Error: " + (quizzes.loadState.refresh as LoadState.Error).error.message
-            )
-        }
-    }
-
-    Scaffold(
-        topBar = {
-            CenterTopAppBar(
-                titleText = stringResource(R.string.the_latest),
-                navigationIcon = {
-                    IconButton(onClick = {
-                        navController.popBackStack()
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = null
-                        )
-                    }
-                },
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(top = innerPadding.calculateTopPadding())
-                .fillMaxSize()
-        ) {
-            if (quizzes.loadState.refresh is LoadState.Loading) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    CircularProgressIndicator()
-                }
-            } else {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier
-                        .padding(start = 16.dp, end = 16.dp)
-                        .weight(1f)
-                ) {
-                    items(quizzes.itemCount) { index ->
-                        quizzes[index]?.let { quiz ->
-                            QuizCard(
-                                title = quiz.title,
-                                imageUrl = quiz.imageUrl,
-                                userName = quiz.userName,
-                                views = quiz.views,
-                                onClick = {
-                                }
-                            )
-                        }
-                    }
-                }
-                if (quizzes.loadState.append is LoadState.Loading) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        CircularProgressIndicator()
-                    }
-                }
-            }
-        }
-    }
+    LazyPagingGridQuiz(
+        topBarText = stringResource(R.string.the_latest),
+        quizzes = quizzes,
+        navController = navController
+    )
 }

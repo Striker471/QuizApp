@@ -75,7 +75,7 @@ object QuizModule {
     @Singleton
     @Named(Pagers.QUIZ_PAGER)
     fun provideQuizPager(firebaseFirestore: FirebaseFirestore): Pager<DocumentSnapshot, QuizItem> {
-        return Pager(PagingConfig(pageSize = 20)) {
+        return Pager(PagingConfig(pageSize = 50)) {
             QuizRemotePager(firebaseFirestore)
         }
     }
@@ -84,7 +84,7 @@ object QuizModule {
     @Singleton
     @Named(Pagers.LATEST_QUIZ_PAGER)
     fun provideLatestQuizPager(firebaseFirestore: FirebaseFirestore): Pager<DocumentSnapshot, QuizItem> {
-        return Pager(PagingConfig(pageSize = 20)) {
+        return Pager(PagingConfig(pageSize = 50)) {
             QuizTheLatestRemotePager(firebaseFirestore)
         }
     }

@@ -47,6 +47,7 @@
     <string name="solve">Solve</string>
     <string name="logout">Logout</string>
     <string name="score">Score</string>
+    <string name="do_not_have_quizzes">You do not have own quizzes</string>
 
 
 </resources>
