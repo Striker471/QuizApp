@@ -138,13 +138,17 @@ class MainActivity : ComponentActivity() {
                                         defaultValue = 0
                                     }
                                 )
-                            ){
-                                SubmitQuizScreen(navController = navController)
+                            ) {
+                                val score = it.arguments?.getInt("score") ?: 0
+                                SubmitQuizScreen(
+                                    navController = navController,
+                                    score = score
+                                )
                             }
-                            composable(Screen.TheLatestQuizzesScreen.route){
+                            composable(Screen.TheLatestQuizzesScreen.route) {
                                 TheLatestQuizzesScreen(navController = navController)
                             }
-                            composable(Screen.MostViewedQuizzesScreen.route){
+                            composable(Screen.MostViewedQuizzesScreen.route) {
                                 MostViewedQuizzesScreen(navController = navController)
                             }
                         }

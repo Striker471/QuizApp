@@ -27,8 +27,10 @@ import com.example.quizapp.R
 @ExperimentalMaterial3Api
 @Composable
 fun SubmitQuizScreen(
-    navController: NavController
+    navController: NavController,
+    score: Int
 ) {
+
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(

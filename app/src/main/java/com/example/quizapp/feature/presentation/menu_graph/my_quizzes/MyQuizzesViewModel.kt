@@ -77,11 +77,17 @@ class MyQuizzesViewModel @Inject constructor(
     }
 
     private fun filterList() {
-        state = state.copy(
-            listOfQuizzes = unfilteredList.filter {
-                it.title.contains(state.searchText, ignoreCase = true)
-            }
-        )
+        state = if (state.searchText.isBlank()) {
+            state.copy(
+                listOfQuizzes = unfilteredList
+            )
+        } else {
+            state.copy(
+                listOfQuizzes = unfilteredList.filter {
+                    it.title.contains(state.searchText, ignoreCase = true)
+                }
+            )
+        }
     }
 
     sealed class UiEvent {

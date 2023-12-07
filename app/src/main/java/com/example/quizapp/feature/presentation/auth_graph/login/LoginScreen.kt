@@ -7,13 +7,18 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -22,6 +27,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -42,6 +50,7 @@ fun LoginScreen(
 ) {
     val state by viewModel.state
     val snackbarHostState = remember { SnackbarHostState() }
+    var passwordVisible by remember { mutableStateOf(false) }
 
     val oneTapLoginLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartIntentSenderForResult(),
@@ -76,7 +85,6 @@ fun LoginScreen(
                             inclusive = true
                         }
                     }
-                    //popup i nested graph do zrobienia
                 }
 
                 is LoginViewModel.UiEvent.LaunchOneTapSignIn -> {
@@ -89,8 +97,6 @@ fun LoginScreen(
             }
         }
     }
-
-
 
     Scaffold(
         topBar = {
@@ -152,7 +158,20 @@ fun LoginScreen(
             MainOutlinedTextField(
                 text = state.password,
                 onValueChange = { viewModel.onEvent(LoginEvent.EnteredPassword(it)) },
-                label = stringResource(R.string.password)
+                label = stringResource(R.string.password),
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    IconButton(
+                        onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(
+                            imageVector = if (passwordVisible) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
+                            contentDescription = null
+                        )
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password
+                )
             )
             Spacer(modifier = Modifier.height(32.dp))
             Text(
@@ -172,7 +191,8 @@ fun LoginScreen(
             MainActionButton(
                 onClick = { viewModel.onEvent(LoginEvent.SignIn) },
                 text = stringResource(R.string.sign_in),
-                modifier = Modifier.padding(bottom = 32.dp)
+                modifier = Modifier
+                    .padding(bottom = 32.dp)
                     .fillMaxWidth(0.83f),
                 enabled = !state.isLoading
             )

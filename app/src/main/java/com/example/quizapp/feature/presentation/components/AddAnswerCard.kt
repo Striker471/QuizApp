@@ -30,8 +30,6 @@ fun AddAnswerCard(
     width: Dp,
     onClick: () -> Unit
 ) {
-
-
     ElevatedCard(
         onClick = onClick,
         modifier = Modifier

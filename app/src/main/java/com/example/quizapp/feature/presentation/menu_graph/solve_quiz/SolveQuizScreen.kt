@@ -56,7 +56,7 @@ fun SolveQuizScreen(
                     snackbarHostState.showSnackbar(it.message)
                 }
 
-                SolveQuizViewModel.UiEvent.NavigateToSubmit -> {
+                is SolveQuizViewModel.UiEvent.NavigateToSubmit -> {
                     navController.navigate(Screen.SubmitQuizScreen.route
 
 
@@ -186,12 +186,10 @@ fun SolveQuizScreen(
 
                                 else -> AnswerState.Unselected
                             } else
-                            when {
-                                i == state.questionList[state.currentQuestion]
+                            when (i) {
+                                state.questionList[state.currentQuestion]
                                     .correctAnswerIndex -> AnswerState.Incorrect
-
                                 else -> AnswerState.Unselected
-
                             }
                     )
                     Spacer(modifier = Modifier.height(16.dp))

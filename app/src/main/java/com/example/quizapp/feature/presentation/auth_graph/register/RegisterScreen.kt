@@ -3,17 +3,25 @@ package com.example.quizapp.feature.presentation.auth_graph.register
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,6 +40,8 @@ fun RegisterScreen(
 ) {
     val state by viewModel.state
     val snackbarHostState = remember { SnackbarHostState() }
+    var passwordVisible by remember { mutableStateOf(false) }
+    var passwordRepeatVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest {
@@ -100,13 +110,39 @@ fun RegisterScreen(
             MainOutlinedTextField(
                 text = state.password,
                 onValueChange = { viewModel.onEvent(RegisterEvent.EnteredPassword(it)) },
-                label = stringResource(R.string.password)
+                label = stringResource(R.string.password),
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    IconButton(
+                        onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(
+                            imageVector = if (passwordVisible) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
+                            contentDescription = null
+                        )
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password
+                )
             )
             Spacer(modifier = Modifier.height(16.dp))
             MainOutlinedTextField(
                 text = state.repeatPassword,
                 onValueChange = { viewModel.onEvent(RegisterEvent.EnteredRepeatPassword(it)) },
-                label = stringResource(R.string.repeat_password)
+                label = stringResource(R.string.repeat_password),
+                visualTransformation = if (passwordRepeatVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    IconButton(
+                        onClick = { passwordRepeatVisible = !passwordRepeatVisible }) {
+                        Icon(
+                            imageVector = if (passwordRepeatVisible) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
+                            contentDescription = null
+                        )
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password
+                )
             )
             Spacer(
                 modifier = Modifier.weight(1f)
@@ -115,7 +151,8 @@ fun RegisterScreen(
             MainActionButton(
                 onClick = { viewModel.onEvent(RegisterEvent.SignUp) },
                 text = stringResource(R.string.sign_up),
-                modifier = Modifier.padding(bottom = 32.dp)
+                modifier = Modifier
+                    .padding(bottom = 32.dp)
                     .fillMaxWidth(0.83f),
                 enabled = !state.isLoading
             )

@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -58,9 +59,7 @@ class SolveQuizViewModel @Inject constructor(
                     is Resource.Loading -> state = state.copy(
                         isLoading = true
                     )
-
                     is Resource.Success -> {
-
                         state = result.data.copy(
                             isLoading = false
                         )
@@ -101,7 +100,7 @@ class SolveQuizViewModel @Inject constructor(
 
     sealed class UiEvent {
         data class ShowSnackbar(val message: String) : UiEvent()
-        object NavigateToSubmit : UiEvent()
+        data class NavigateToSubmit(val score: Int) : UiEvent()
         object MenuNavigate : UiEvent()
     }
 
@@ -159,7 +158,7 @@ class SolveQuizViewModel @Inject constructor(
             when (it) {
                 is Resource.Error -> _eventFlow.emit(UiEvent.ShowSnackbar(it.message))
                 Resource.Loading -> {}
-                is Resource.Success -> _eventFlow.emit(UiEvent.NavigateToSubmit)
+                is Resource.Success -> _eventFlow.emit(UiEvent.NavigateToSubmit(state.score))
             }
         }.launchIn(viewModelScope)
     }
