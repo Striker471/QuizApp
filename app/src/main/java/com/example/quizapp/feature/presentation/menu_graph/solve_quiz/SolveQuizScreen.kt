@@ -57,22 +57,17 @@ fun SolveQuizScreen(
                 }
 
                 is SolveQuizViewModel.UiEvent.NavigateToSubmit -> {
-                    navController.navigate(Screen.SubmitQuizScreen.route
-
-
-//                            navController.navigate(
-//                            Screen.AddEditNoteScreen.route +
-//                                    "?noteId=${note.id}&noteColor=${note.color}"
-//                            )
-
+                    navController.navigate(
+                        Screen.SubmitQuizScreen.route
+                                + "?score=${it.score}"
                     ) {
-                        popUpTo(Screen.MenuScreen.route){
+                        popUpTo(Screen.MenuScreen.route) {
                         }
                     }
                 }
 
                 SolveQuizViewModel.UiEvent.MenuNavigate ->
-                    navController.navigate(Screen.MenuScreen.route){
+                    navController.navigate(Screen.MenuScreen.route) {
                         popUpTo(Screen.MenuScreen.route)
                     }
             }
@@ -189,6 +184,7 @@ fun SolveQuizScreen(
                             when (i) {
                                 state.questionList[state.currentQuestion]
                                     .correctAnswerIndex -> AnswerState.Incorrect
+
                                 else -> AnswerState.Unselected
                             }
                     )

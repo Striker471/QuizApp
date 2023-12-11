@@ -26,13 +26,13 @@ import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.example.quizapp.feature.domain.model.QuizItem
+import com.example.quizapp.feature.presentation.util.Screen
 
 @Composable
 fun LazyPagingGridQuiz (
     topBarText: String,
     quizzes: LazyPagingItems<QuizItem>,
     navController : NavController,
-    onCardClick: (String) -> Unit = { }
 ){
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -94,6 +94,10 @@ fun LazyPagingGridQuiz (
                                 userName = quiz.userName,
                                 views = quiz.views,
                                 onClick = {
+                                    navController.navigate(
+                                        Screen.MenuQuizScreen.route +
+                                                "?quizId=${quiz.quizId}"
+                                    )
                                 }
                             )
                         }

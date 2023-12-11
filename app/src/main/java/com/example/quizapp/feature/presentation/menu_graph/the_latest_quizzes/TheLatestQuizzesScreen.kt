@@ -47,6 +47,7 @@ fun TheLatestQuizzesScreen(
     LazyPagingGridQuiz(
         topBarText = stringResource(R.string.the_latest),
         quizzes = quizzes,
-        navController = navController
+        navController = navController,
+
     )
 }

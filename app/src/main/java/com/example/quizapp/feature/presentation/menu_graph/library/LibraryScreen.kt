@@ -32,6 +32,7 @@ import com.example.quizapp.R
 import com.example.quizapp.feature.presentation.bottom_bar.BottomBar
 import com.example.quizapp.feature.presentation.components.CenterTopAppBar
 import com.example.quizapp.feature.presentation.components.QuizCard
+import com.example.quizapp.feature.presentation.util.Screen
 
 
 @Composable
@@ -93,6 +94,10 @@ fun LibraryScreen(
                                 userName = quiz.userName,
                                 views = quiz.views,
                                 onClick = {
+                                    navController.navigate(
+                                        Screen.MenuQuizScreen.route +
+                                                "?quizId=${quiz.quizId}"
+                                    )
                                 }
                             )
                         }

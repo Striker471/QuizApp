@@ -31,9 +31,9 @@
     <string name="enter_quiz_title">Enter quiz title</string>
     <string name="description">Description</string>
     <string name="add_question">Add question</string>
-    <string name="add_answear">Add answear</string>
-    <string name="multiple_answear">Multiple Answear</string>
-    <string name="correct_answear">Correct Answear</string>
+    <string name="add_answer">Add answer</string>
+    <string name="multiple_answer">Multiple Answer</string>
+    <string name="correct_answer">Correct Answer</string>
     <string name="delete">Delete</string>
     <string name="finish">Finish</string>
     <string name="home">Home</string>
@@ -48,6 +48,8 @@
     <string name="logout">Logout</string>
     <string name="score">Score</string>
     <string name="do_not_have_quizzes">You do not have own quizzes</string>
+    <string name="filter">Filter</string>
+    <string name="points">points</string>
 
 
 </resources>

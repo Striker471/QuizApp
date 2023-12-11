@@ -53,7 +53,7 @@ fun AddAnswerCard(
                     .size(32.dp)
             )
             Text(
-                text = stringResource(R.string.add_answear),
+                text = stringResource(R.string.add_answer),
                 style = MaterialTheme.typography.bodyMedium
             )
         }

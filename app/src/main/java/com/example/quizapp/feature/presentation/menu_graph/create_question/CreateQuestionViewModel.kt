@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quizapp.feature.domain.use_case.menu.AddQuestion
 import com.example.quizapp.feature.domain.use_case.menu.DeleteQuestion
+import com.example.quizapp.feature.domain.use_case.menu.GetQuestions
 import com.example.quizapp.feature.domain.use_case.menu.UpdateQuestion
 import com.example.quizapp.feature.domain.util.Resource
 import com.example.quizapp.feature.presentation.menu_graph.create_quiz.CreateQuizViewModel
@@ -23,7 +24,8 @@ class CreateQuestionViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val addQuestion: AddQuestion,
     private val updateQuestion: UpdateQuestion,
-    private val deleteQuestion: DeleteQuestion
+    private val deleteQuestion: DeleteQuestion,
+    private val getQuestions: GetQuestions
 ) : ViewModel() {
 
     // Stan dla calej listy pytan
@@ -40,8 +42,21 @@ class CreateQuestionViewModel @Inject constructor(
     private var quizId: String = ""
 
     init {
-        savedStateHandle.get<String>("quizId")?.let {
-            quizId = it
+        savedStateHandle.get<String>("quizId")?.let { quizIdValue ->
+            quizId = quizIdValue
+
+            getQuestions(quizIdValue).onEach { questionsResult ->
+                when (questionsResult) {
+                    is Resource.Error -> _eventFlow.emit(UiEvent.ShowSnackbar(questionsResult.message))
+                    Resource.Loading -> { }
+                    is Resource.Success -> {
+                        _questionListState.value = questionsResult.data
+                        _currentQuestionState.value = _questionListState.value
+                            .createQuestionStateList[questionsResult.data.currentQuestion - 1]
+                            .copyWithNewAnswers()
+                    }
+                }
+            }.launchIn(viewModelScope)
         }
     }
 

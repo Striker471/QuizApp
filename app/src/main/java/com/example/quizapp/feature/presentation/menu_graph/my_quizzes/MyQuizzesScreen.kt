@@ -1,7 +1,6 @@
 package com.example.quizapp.feature.presentation.menu_graph.my_quizzes
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,11 +18,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +31,7 @@ import androidx.navigation.NavController
 import com.example.quizapp.R
 import com.example.quizapp.feature.presentation.bottom_bar.BottomBar
 import com.example.quizapp.feature.presentation.components.CenterTopAppBar
-import com.example.quizapp.feature.presentation.components.QuizCardMyProfile
+import com.example.quizapp.feature.presentation.menu_graph.my_quizzes.components.QuizCardMyProfile
 import com.example.quizapp.feature.presentation.util.Screen
 import kotlinx.coroutines.flow.collectLatest
 
@@ -96,7 +92,7 @@ fun MyQuizzesScreen(
             OutlinedTextField(
                 value = state.searchText,
                 onValueChange = { viewModel.onSearchTextChange(it) },
-                placeholder = { Text("Filter") }
+                placeholder = { Text(stringResource(R.string.filter)) }
             )
             Spacer(modifier = Modifier.height(24.dp))
             if (state.listOfQuizzes.isEmpty())
@@ -114,7 +110,13 @@ fun MyQuizzesScreen(
                         QuizCardMyProfile(
                             title = it.title,
                             quizUrl = it.imageUrl,
-                            views = it.views
+                            views = it.views,
+                            onClick = {
+                                navController.navigate(
+                                    Screen.CreateQuestionScreen.route +
+                                            "?quizId=${it.quizId}"
+                                )
+                            }
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                     }

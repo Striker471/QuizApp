@@ -56,7 +56,7 @@ fun AddStraightAnswerCard(
         ) {
             if (text.isBlank()) {
                 Text(
-                    text = stringResource(R.string.add_answear),
+                    text = stringResource(R.string.add_answer),
                     style = MaterialTheme.typography.bodyMedium,
                 )
             } else {

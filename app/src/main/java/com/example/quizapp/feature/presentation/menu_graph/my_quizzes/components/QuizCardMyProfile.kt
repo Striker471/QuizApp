@@ -1,4 +1,4 @@
-package com.example.quizapp.feature.presentation.components
+package com.example.quizapp.feature.presentation.menu_graph.my_quizzes.components
 
 
 import androidx.compose.foundation.Image
@@ -19,10 +19,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.quizapp.R
+import com.example.quizapp.feature.presentation.components.LoadingImage
 
 @Composable
 fun QuizCardMyProfile(
-    title: String = "Quizw",
+    title: String,
     quizUrl: String? = null,
     views: Int = 0,
     onClick: () -> Unit = { }

@@ -57,7 +57,7 @@ fun AddAnswerDialog(
             ) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = stringResource(R.string.add_answear),
+                    text = stringResource(R.string.add_answer),
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -73,7 +73,7 @@ fun AddAnswerDialog(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = stringResource(R.string.correct_answear),
+                        text = stringResource(R.string.correct_answer),
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Switch(
