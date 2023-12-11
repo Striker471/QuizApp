@@ -1,4 +1,5 @@
 <resources>
+    <string name="web_client_id">904047719802-qoqcutsfcpfhhrqhorejpomsip1clduf.apps.googleusercontent.com</string>
     <string name="app_name">QuizApp</string>
     <string name="create_an_account">Create an account</string>
     <string name="create_account_body">Please enter your username, email address,
@@ -30,11 +31,25 @@
     <string name="enter_quiz_title">Enter quiz title</string>
     <string name="description">Description</string>
     <string name="add_question">Add question</string>
-    <string name="add_answear">Add answear</string>
-    <string name="multiple_answear">Multiple Answear</string>
-    <string name="correct_answear">Correct Answear</string>
+    <string name="add_answer">Add answer</string>
+    <string name="multiple_answer">Multiple Answer</string>
+    <string name="correct_answer">Correct Answer</string>
     <string name="delete">Delete</string>
     <string name="finish">Finish</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="library">Library</string>
+    <string name="my_quizzes">My Quizzes</string>
+    <string name="views">Views</string>
+    <string name="enter_your_question">Enter your question</string>
+    <string name="update_question">Update question</string>
+    <string name="solve_quiz">Solve Quiz</string>
+    <string name="solve">Solve</string>
+    <string name="logout">Logout</string>
+    <string name="score">Score</string>
+    <string name="do_not_have_quizzes">You do not have own quizzes</string>
+    <string name="filter">Filter</string>
+    <string name="points">points</string>
 
 
 </resources>
