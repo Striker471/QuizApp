@@ -64,7 +64,7 @@ fun MenuQuizScreen(
                 titleText = stringResource(R.string.solve_quiz),
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.navigate(Screen.MenuScreen.route)
+                        navController.popBackStack()
                     }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
