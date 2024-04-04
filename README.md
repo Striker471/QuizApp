@@ -1,2 +1,2 @@
 # QuizApp
-Android, Jetpack Compose, Firebase
+Android, Jetpack Compose, Firebase, MVVM
